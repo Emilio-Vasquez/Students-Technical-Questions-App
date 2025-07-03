@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Account Settings - Technical Questions App{% endblock %}
+
+{% block content %}
+<div class="account-settings-container">
+    <h2>Account Settings</h2>
+
+    <div class="account-card">
+        <h3>Profile Information</h3>
+        <p><strong>Username:</strong> {{ username }}</p>
+        <p><strong>Email:</strong> {{ email }} 
+            <button id="verify-email-btn" class="small-btn action-btn">Verify Email</button>
+        </p>
+        <p><strong>Phone:</strong> {{ phone if phone else "Not set" }}
+            <button id="toggle-phone-btn" class="small-btn action-btn">Add/Update</button>
+        </p>
+    </div>
+
+    <div class="account-card">
+        <button id="toggle-password-btn" class="primary-btn">Change Password</button>
+        <form id="password-form" method="post" action="{{ url_for('main.account_settings') }}" class="account-form">
+            <h3>Change Password</h3>
+            <div>
+                <label for="current_password">Current Password:</label>
+                <input type="password" name="current_password" id="current_password" required>
+            </div>
+            <div>
+                <label for="new_password">New Password:</label>
+                <input type="password" name="new_password" id="new_password" required>
+            </div>
+            <div>
+                <label for="confirm_new_password">Confirm New Password:</label>
+                <input type="password" name="confirm_new_password" id="confirm_new_password" required>
+            </div>
+            <button type="submit" name="action" value="change_password">Update Password</button>
+        </form>
+    </div>
+
+    <div class="account-card">
+        <div id="toggle-phone-btn" class="section-toggle">
+            <h3>Update Phone</h3>
+        </div>
+        <form id="phone-form" method="post" action="{{ url_for('main.account_settings') }}" class="account-form">
+            <h3>Phone Number Section</h3>
+            <div>
+                <label for="phone">Phone Number:</label>
+                <input type="text" name="phone" id="phone" required placeholder="+1 555-123-4567">
+            </div>
+            <button type="submit" name="action" value="update_phone">Save Phone Number</button>
+        </form>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/account_settings.js') }}"></script>
+
+{% endblock %}

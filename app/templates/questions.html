@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Questions - Technical Questions App{% endblock %}
+
+{% block content %}
+<div class="questions-page">
+    <!-- Sidebar for filters -->
+    <aside class="question-filters">
+        <h3>Categories</h3>
+        <ul class="category-list">
+            <li><button data-category="All">All</button></li>
+            <li><button data-category="Computer Science">Computer Science</button></li>
+            <li><button data-category="Databases">Databases</button></li>
+            <li><button data-category="Data Science">Data Science</button></li>
+        </ul>
+        <h3>Difficulty</h3>
+        <select id="difficulty-filter">
+            <option value="All">All</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+        </select>
+    </aside>
+
+    <!-- Main content area -->
+    <section class="questions-list">
+        <h2>Available Questions</h2>
+        {% if questions %}
+            <table class="questions-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Prompt</th>
+                        <th>Language</th>
+                        <th>Difficulty</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for q in questions[:20] %}
+                    <tr 
+                        data-category="{{ q.category }}" 
+                        data-difficulty="{{ q.difficulty }}">
+                        <td>{{ q.title }}</td>
+                        <td>{{ q.prompt | truncate(150) }}</td>
+                        <td>{{ q.language|capitalize }}</td>
+                        <td>{{ q.difficulty }}</td>
+                        <td>
+                            <a href="{{ url_for('main.question_detail', slug=q.slug) }}" class="attempt-button">Attempt</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No questions available at this time.</p>
+        {% endif %}
+    </section>
+</div>
+
+<!-- Adding this js file so that we can have interactive filters for the category buttons -->
+<script src="{{ url_for('static', filename='js/question_filter.js') }}"></script>
+{% endblock %}

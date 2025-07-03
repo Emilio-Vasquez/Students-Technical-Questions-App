@@ -1,0 +1,49 @@
+# ## ignore the pycache and everything inside of it
+# __pycache__/
+# *.pyc
+# *.pyo
+# *.pyd
+# .pytest_cache/
+
+# ## ignore the virtual environment and everything inside of it
+VirtualEnv/
+
+# ## ignore the secret keys that we have in our environment
+# .env
+# .env.*
+# VirtualEnv/
+# *.egg-info/
+# .Python
+
+# ## also want to ignore the datbase queries I've made:
+# database_queries.sql
+
+# ## I also want it to ignore the data file inside of the app/ folder, this file contains the questions and their structure
+# app/data/
+
+# ## Going to put the flask debug logs as well:
+# *.log
+
+# ## Any IDE files:
+# .vscode/
+# .idea/
+# *.swp
+
+# ## Do not have linux or macOS files, but just in case:
+# .DS_Store
+
+# ## The os trash:
+# Thumbs.db
+
+# ## My Dockerfile:
+# **/grader/__pycache__/
+
+# ## The gitignore itself:
+# .gitignore
+
+# ## Database dumps:
+# *.sql
+# *.sqlite3
+
+# ## Any workspace data:
+# *.code-workspace

@@ -1,0 +1,522 @@
+/* This is the header color from UCNJ */
+header {
+    background-color: #670b14;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+header .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+nav a {
+    color: white;
+    margin-left: 1rem;
+    text-decoration: none;
+    font-weight: bold;
+}
+nav a:hover {
+    text-decoration: underline;
+}
+main {
+    flex: 1; /* This makes main take up available space, we have to have this to make the footer be pushed to the bottom */
+    margin: 2rem;
+
+}
+footer {
+    background-color: #f5f5f5;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+
+}
+.flashes {
+    list-style: none;
+    padding: 0;
+}
+.flash {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.flash.success { background-color: #d4edda; color: #155724; }
+.flash.info { background-color: #d1ecf1; color: #0c5460; }
+.flash.danger { background-color: #f8d7da; color: #721c24; }
+
+/* Adding these new rules so that we have a sticky footer */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Adding user drop down when they're logged in */
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.user-dropdown span {
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.user-dropdown span:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.dropdown-content a {
+    color: #333 !important;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    margin-left: 0 !important;
+    font-weight: normal;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+    text-decoration: none;
+}
+
+.user-dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Now let's also add a closing option for the flashes */
+.flash {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-right: 2rem; /* Make room for close button */
+}
+
+.flash-close {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-weight: bold;
+    color: inherit;
+    opacity: 0.7;
+}
+
+.flash-close:hover {
+    opacity: 1;
+}
+
+/* Now let's create the css for the questions overview page: */
+/* Layout for the overall questions page */
+.questions-page {
+    display: flex;
+    gap: 2rem;
+}
+
+/* Sidebar Filters*/
+.question-filters {
+    width: 220px;
+    background-color: #f5f5f5;
+    padding: 1rem;
+    border-radius: 8px;
+    position: sticky;
+    top: 1rem;
+    height: fit-content;
+}
+
+.question-filters h3 {
+    margin-top: 0;
+}
+
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-list li {
+    margin-bottom: 0.5rem;
+}
+
+.category-list button {
+    width: 100%;
+    background-color: #670b14;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.category-list button:hover,
+.category-list button.active {
+    background-color: #8c1420;
+}
+
+#difficulty-filter {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+/* Main Questions List */
+.questions-list {
+    flex: 1;
+}
+
+.questions-list h2 {
+    margin-top: 0;
+}
+
+/* If you still use cards somewhere else: */
+.question-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #fff;
+}
+
+.question-card h3 {
+    margin-top: 0;
+}
+
+.question-card .attempt-button {
+    display: inline-block;
+    background-color: #670b14;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.question-card .attempt-button:hover {
+    background-color: #8c1420;
+}
+
+/* Table version for questions */
+.questions-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+}
+
+.questions-table thead {
+    background-color: #670b14;
+    color: white;
+}
+
+.questions-table th,
+.questions-table td {
+    padding: 0.8rem;
+    text-align: left;
+}
+
+.questions-table tbody tr {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.questions-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.questions-table tbody td {
+    border: none;
+}
+
+.attempt-button {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background-color: #670b14;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.attempt-button:hover {
+    background-color: #8c1420;
+}
+
+/* Question Detail Styling */
+.question-detail-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fafafa;
+}
+
+.question-detail-container textarea {
+    width: 100%;
+    font-family: monospace;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.question-detail-container button {
+    margin-top: 1rem;
+    background-color: #670b14;
+    color: white;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.question-detail-container button:hover {
+    background-color: #8c1420;
+}
+
+.back-button {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #670b14;
+    text-decoration: none;
+}
+
+.back-button:hover {
+    text-decoration: underline;
+}
+
+.category-list button.active {
+    background-color: #8c1420;
+} /* AFter clicking the button it will stay highlighted */
+
+/* Let's also make the header responsive based on the pixel sizes of the screen */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    nav {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 0.5rem;
+    }
+    nav a {
+        margin: 0.5rem 0.5rem 0 0;
+    }
+}
+
+/* These are the styles for auth forms like register/login */
+
+.auth-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.auth-container h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.auth-container form div {
+    margin-bottom: 1rem;
+}
+
+.auth-container label {
+    font-weight: bold;
+}
+
+.auth-container input {
+    width: 100%;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+
+.auth-container button {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #670b14;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.auth-container button:hover {
+    background-color: #8c1420;
+}
+
+.error {
+    color: red;
+    font-size: 0.8rem;
+}
+.success {
+    color: green;
+    font-size: 0.8rem;
+}
+
+/* This is the feedback styling */
+.feedback-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.feedback-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #670b14;
+}
+
+.feedback-container form div {
+    margin-bottom: 1.2rem;
+}
+
+.feedback-container label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.feedback-container input[type="text"],
+.feedback-container input[type="email"],
+.feedback-container select,
+.feedback-container textarea {
+    width: 100%;
+    padding: 0.6rem;
+    box-sizing: border-box;
+    border: 1px solid #999;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.feedback-container textarea {
+    resize: vertical;
+    min-height: 200px;
+}
+
+.feedback-container button {
+    width: 100%;
+    padding: 0.7rem;
+    background-color: #670b14;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.feedback-container button:hover {
+    background-color: #8c1420;
+}
+
+/* Account settings styling: */
+.account-settings-container {
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+.account-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.account-card h3 {
+    margin-top: 0;
+}
+
+.account-form {
+    display: none;
+    margin-top: 1rem;
+}
+
+.account-form.visible {
+    display: block;
+}
+
+.primary-btn {
+    background-color: #670b14;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.primary-btn:hover {
+    background-color: #8c1420;
+}
+
+.action-btn {
+    margin-left: 1rem;
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.action-btn:hover {
+    background-color: #ccc;
+}
+
+.account-form input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.3rem;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+}
+
+.account-form button {
+    background-color: #670b14;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.account-form button:hover {
+    background-color: #8c1420;
+}

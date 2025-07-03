@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Technical Questions App{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h2>Register</h2>
+    <form method="post" action="{{ url_for('main.register') }}">
+        <div>
+            <label for="username">Username:</label><br>
+            <input type="text" name="username" id="username" required>
+            <span id="username-error" class="error"></span>
+        </div>
+        <div>
+            <label for="email">Email:</label><br>
+            <input type="email" name="email" id="email" required>
+            <span id="email-error" class="error"></span>
+        </div>
+        <div>
+            <label for="password">Password:</label><br>
+            <input type="password" name="password" id="password" required>
+            <span id="password-error" class="error"></span>
+        </div>
+        <div>
+            <label for="confirm_password">Confirm Password:</label><br>
+            <input type="password" name="confirm_password" id="confirm_password" required>
+            <span id="confirm-error" class="error"></span>
+        </div>
+        <div>
+            <button type="submit">Register</button>
+        </div>
+    </form>
+    <p style="text-align:center; margin-top:1rem;">
+        Already have an account? <a href="{{ url_for('main.login') }}">Login here</a>.
+    </p>
+</div>
+
+<!-- I want to include the js file within the register.html because it's only specific to registering: -->
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+{% endblock %}

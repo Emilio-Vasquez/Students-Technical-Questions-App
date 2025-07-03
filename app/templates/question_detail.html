@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ question.title }} - Technical Questions App{% endblock %}
+
+{% block content %}
+<div class="question-detail-container">
+    <h2>{{ question.title }}</h2>
+    <p>{{ question.prompt }}</p>
+    <form method="post" action="{{ url_for('main.question_detail', slug=question.slug) }}">
+        <div>
+            <label for="language">Language:</label>
+            <select name="language" id="language">
+                <option value="python" {% if question.language == "python" %}selected{% endif %}>Python</option>
+                <option value="sql" {% if question.language == "sql" %}selected{% endif %}>SQL</option>
+            </select>
+        </div>
+        <div>
+            <label for="answer">Your Solution:</label>
+            <textarea name="answer" id="answer" rows="10" placeholder="Type your code or query here..." required></textarea>
+        </div>
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+    <p>
+        <a href="{{ url_for('main.questions') }}" class="back-button">← Back to Questions</a>
+    </p>
+</div>
+{% endblock %}
