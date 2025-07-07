@@ -50,6 +50,33 @@
             <button type="submit" name="action" value="update_phone">Save Phone Number</button>
         </form>
     </div>
+
+    <div class="account-card progress-card">
+        <h3>Your Progress</h3>
+        <div class="progress-category">
+            <span>Computer Science</span>
+            <div class="progress-bar">
+                <div class="progress-fill cs-fill" style="width: {{ (progress.cs_completed / totals.cs * 100) if totals.cs else 0 }}%"></div>
+            </div>
+            <span class="progress-count">{{ progress.cs_completed }}/{{ totals.cs }}</span>
+        </div>
+        <div class="progress-category">
+            <span>Data Science</span>
+            <div class="progress-bar">
+                <div class="progress-fill ds-fill"
+                    style="width: {{ ((progress.cs_completed + progress.db_completed) / (totals.cs + totals.db) * 100) if (totals.cs + totals.db) else 0 }}%">
+                </div>
+            </div>
+            <span class="progress-count">{{ progress.cs_completed + progress.db_completed }}/{{ totals.cs + totals.db }}</span>
+        </div>
+        <div class="progress-category">
+            <span>Databases</span>
+            <div class="progress-bar">
+                <div class="progress-fill db-fill" style="width: {{ (progress.db_completed / totals.db * 100) if totals.db else 0 }}%"></div>
+            </div>
+            <span class="progress-count">{{ progress.db_completed }}/{{ totals.db }}</span>
+        </div>
+    </div>
 </div>
 
 <script src="{{ url_for('static', filename='js/account_settings.js') }}"></script>

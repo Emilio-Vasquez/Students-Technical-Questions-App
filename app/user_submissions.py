@@ -27,12 +27,21 @@ def store_user_submission(username, slug, answer, language, passed):
             """, (user_id, slug))
             existing = cursor.fetchone()
             if existing:
-                # update
+                # first, get current pass status
+                cursor.execute("""
+                    SELECT passed FROM user_submissions
+                    WHERE user_id=%s AND question_slug=%s
+                """, (user_id, slug))
+                current_passed = cursor.fetchone()["passed"]
+
+                # only upgrade to True if new submission passed
+                new_passed = True if current_passed or passed else False
+
                 cursor.execute("""
                     UPDATE user_submissions
                     SET code_submission=%s, language=%s, passed=%s
                     WHERE user_id=%s AND question_slug=%s
-                """, (answer, language, passed, user_id, slug))
+                """, (answer, language, new_passed, user_id, slug))
             else:
                 # insert
                 cursor.execute("""

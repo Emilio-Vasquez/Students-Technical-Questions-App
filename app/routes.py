@@ -8,6 +8,7 @@ from .feedback import handle_feedback ## This is the function the handles the fe
 from .account_settings import handle_account_settings ## Need this to handle the get,post information to change account settings
 from .question_aggregates import get_question_counts ## Need this to get the aggregated counts of the questions
 from .user_submissions import store_user_submission ## store_user_submission function has the logic to store user submissions
+from .db import get_db_connection ## getting the database connection
 
 main = Blueprint('main', __name__)
 
@@ -87,7 +88,26 @@ def question_detail(slug): ## The question.title will be obtained when the user 
         flash("Question is not found", "danger")
         return redirect(url_for('main.questions'))
     
-    submitted_answer = None
+    previous_answer = None
+    previous_language = question["language"]  # fallback default
+
+    if 'username' in session:
+        conn = get_db_connection()
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                SELECT us.code_submission, us.language
+                FROM user_submissions us
+                JOIN users u ON u.id = us.user_id
+                WHERE us.question_slug=%s AND LOWER(u.username) = LOWER(%s)
+            """, (slug, session['username']))
+            row = cursor.fetchone()
+            if row:
+                previous_answer = row["code_submission"]
+                previous_language = row["language"]
+        conn.close()
+
+    answer = ""
+    submitted_answer = previous_answer  # prepopulate with their latest
     evaluation = None
     user_output = None
 
@@ -100,11 +120,10 @@ def question_detail(slug): ## The question.title will be obtained when the user 
             return redirect(url_for("main.question_detail", slug=slug))
 
         # your evaluation function
-        result = evaluate_submission(answer, question.get("expected_output"), language)
+        evaluation, user_output = evaluate_submission(answer, question.get("expected_output"), language)
 
-        # store
         if 'username' in session:
-            passed = (result == "Correct")  # adjust as you wish
+            passed = evaluation.startswith("✅")
             store_user_submission(
                 username=session['username'],
                 slug=slug,
@@ -115,15 +134,17 @@ def question_detail(slug): ## The question.title will be obtained when the user 
 
         # we want to show these on the page
         submitted_answer = answer
-        evaluation, user_output = evaluate_submission(answer, question.get("expected_output"), language)  # if you want to display “their code” as “their output”
+        previous_language = language ## Take this immediately so that it doesnt switch back to default language when you submit code for evaluation
+        ## duplicate call: evaluation, user_output = evaluate_submission(answer, question.get("expected_output"), language)  # if you want to display “their code” as “their output”
         # you could swap in real execution output if you have it
 
     return render_template(
         "question_detail.html",
         question=question,
         evaluation=evaluation,
-        submitted_answer=answer,
-        user_output=user_output
+        submitted_answer=submitted_answer if submitted_answer else "",  # safely default to blank
+        user_output=user_output,
+        previous_language=previous_language
     )
 
 @main.route('/logout') ## Flask automatically uses GET method if you don't specify, so when the user clciks the button it redirects

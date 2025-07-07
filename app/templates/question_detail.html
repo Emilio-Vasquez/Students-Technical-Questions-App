@@ -12,12 +12,27 @@
             <label for="language">Language:</label>
             <select name="language" id="language">
                 <option value="python" {% if question.language == "python" %}selected{% endif %}>Python</option>
-                <option value="sql" {% if question.language == "sql" %}selected{% endif %}>SQL</option>
+                <option value="sql" {% if previous_language == "sql" %}selected{% endif %}>SQL</option>
             </select>
         </div>
         <div>
             <label for="answer">Your Solution:</label>
-            <textarea name="answer" id="answer" rows="15" required placeholder="Write your code here...">{{ submitted_answer if submitted_answer }}</textarea>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <label for="answer">Your Solution:</label>
+                <button type="button" id="theme-toggle" style="
+                    font-size: 0.8rem;
+                    padding: 0.2rem 0.5rem;
+                    background-color: #670b14;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    margin-bottom: 0.5rem;
+                ">
+                    Switch Theme
+                </button>
+            </div>
+            <textarea name="answer" id="answer">{{ submitted_answer if submitted_answer }}</textarea>
         </div>
         <button type="submit">Submit</button>
     </form>
@@ -49,4 +64,5 @@
         <a href="{{ url_for('main.questions') }}" class="back-button">← Back to Questions</a>
     </p>
 </div>
+<script src="{{ url_for('static', filename='js/code_editor.js') }}"></script> <!-- styling for text editor -->
 {% endblock %}

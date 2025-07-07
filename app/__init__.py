@@ -1,10 +1,9 @@
 from flask import Flask
 from .routes import main
+from config import Config
 
 def create_app():
     app = Flask(__name__)
-    
-    app.secret_key = "MySecretKeyIsDog2025"  ## Not sure what to put just yet so I just put gibberish
+    app.config.from_object(Config)
     app.register_blueprint(main)
-    
     return app

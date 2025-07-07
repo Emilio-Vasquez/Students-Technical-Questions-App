@@ -7,39 +7,61 @@ def handle_account_settings():
         flash("Please login to access account settings", "danger")
         return redirect(url_for('main.login'))
 
-    # get user details
     conn = get_db_connection()
     with conn.cursor() as cursor:
+        # get user details
         cursor.execute("""
             SELECT id, username, email, phone, password
             FROM users
             WHERE LOWER(username) = LOWER(%s)
         """, (session['username'],))
         user = cursor.fetchone()
+
+        if not user:
+            conn.close()
+            flash("User not found.", "danger")
+            return redirect(url_for('main.login'))
+
+        user_id = user['id']
+
+        # get progress counts + total counts in one go
+        cursor.execute("""
+            SELECT
+                SUM(CASE WHEN q.category = 'Computer Science' AND us.passed = 1 THEN 1 ELSE 0 END) as cs_completed,
+                SUM(CASE WHEN q.category = 'Data Science' AND us.passed = 1 THEN 1 ELSE 0 END) as ds_completed,
+                SUM(CASE WHEN q.category = 'Databases' AND us.passed = 1 THEN 1 ELSE 0 END) as db_completed,
+                SUM(CASE WHEN q.category = 'Computer Science' THEN 1 ELSE 0 END) as cs_total,
+                SUM(CASE WHEN q.category = 'Data Science' THEN 1 ELSE 0 END) as ds_total,
+                SUM(CASE WHEN q.category = 'Databases' THEN 1 ELSE 0 END) as db_total
+            FROM questions q
+            LEFT JOIN user_submissions us
+            ON us.question_slug = q.slug AND us.user_id = %s
+        """, (user_id,))
+        progress_row = cursor.fetchone()
+
     conn.close()
 
-    if not user:
-        flash("User not found.", "danger")
-        return redirect(url_for('main.login'))
+    progress = {
+        "cs_completed": progress_row["cs_completed"] or 0,
+        "ds_completed": progress_row["ds_completed"] or 0,
+        "db_completed": progress_row["db_completed"] or 0
+    }
+    totals = {
+        "cs": progress_row["cs_total"] or 0,
+        "ds": progress_row["ds_total"] or 0,
+        "db": progress_row["db_total"] or 0
+    }
 
-    # unpack from dictionary
-    user_id = user['id']
-    username = user['username']
-    email = user['email']
-    phone = user['phone']
-    hashed_pw = user['password']
-
-    ## handle POST
+    # handle POST
     if request.method == "POST":
         action = request.form.get("action")
 
-        # change password
         if action == "change_password":
             current_password = request.form.get("current_password")
             new_password = request.form.get("new_password")
             confirm_new_password = request.form.get("confirm_new_password")
 
-            if not bcrypt.checkpw(current_password.encode('utf-8'), hashed_pw.encode('utf-8')):
+            if not bcrypt.checkpw(current_password.encode('utf-8'), user['password'].encode('utf-8')):
                 flash("Current password is incorrect.", "danger")
             elif new_password != confirm_new_password:
                 flash("New passwords do not match.", "danger")
@@ -57,7 +79,6 @@ def handle_account_settings():
                 flash("Password updated successfully.", "success")
                 return redirect(url_for('main.account_settings'))
 
-        # update phone
         elif action == "update_phone":
             new_phone = request.form.get("phone").strip()
             if not new_phone:
@@ -73,14 +94,14 @@ def handle_account_settings():
                 flash("Phone number updated successfully.", "success")
                 return redirect(url_for('main.account_settings'))
 
-        # verify email placeholder
         elif action == "verify_email":
             flash("A verification email would be sent here (logic to implement).", "info")
 
-    # render template always on GET or after POST
     return render_template(
         "account_settings.html",
-        username=username,
-        email=email,
-        phone=phone if phone else ""
+        username=user["username"],
+        email=user["email"],
+        phone=user["phone"] if user["phone"] else "",
+        progress=progress,
+        totals=totals
     )

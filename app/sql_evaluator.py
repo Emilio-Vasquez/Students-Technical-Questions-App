@@ -4,27 +4,22 @@ def evaluate_sql(user_query, expected_output):
     try:
         conn = sqlite3.connect(":memory:")
         cursor = conn.cursor()
-        ## preload schema
-        ## IMPORTANT: These two codes below essentially create a table called sales to be used to evaluate
-        ## whether the evaulator work or not!
-        ## We need to create a db later and make sure to connect it, and based on the question pick the result to compare
-        # Setup test table, adjust for real later
+        # Setup demo table
         cursor.execute("CREATE TABLE sales (amount INT);")
         cursor.executemany("INSERT INTO sales(amount) VALUES (?)", [(400,), (600,)])
 
+        # run user code
         cursor.execute(user_query)
         results = cursor.fetchall()
 
-        # Flatten results for simpler display
-        output = "\n".join(str(row) for row in results) if results else "(no rows returned)"
-
-        # expected_output is assumed string, you could parse it better
-        if str(results) == expected_output:
+        # evaluation based on first column of first row
+        if results and str(results[0][0]) == expected_output:
             evaluation = "✅ Pass!"
         else:
-            evaluation = f"❌ Fail: Output does not match expected."
+            evaluation = f"❌ Fail. Got: {results[0][0] if results else 'NULL'}, Expected: {expected_output}"
 
-        # limit output lines
+        # pretty output for user to see
+        output = "\n".join(str(row) for row in results) if results else "(no rows returned)"
         MAX_OUTPUT_LINES = 20
         output_lines = output.splitlines()
         if len(output_lines) > MAX_OUTPUT_LINES:

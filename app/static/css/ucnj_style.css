@@ -592,6 +592,48 @@ body {
     background-color: #8c1420;
 }
 
+/* Progress styling */
+.progress-card {
+    background-color: #ffffff;
+    border-left: 5px solid #670b14;
+    padding: 1rem;
+}
+
+.progress-category {
+    margin-bottom: 1rem;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #e0e0e0;
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+}
+
+.progress-fill {
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+.cs-fill {
+    background-color: #4CAF50; /* green */
+}
+.ds-fill {
+    background-color: #2196F3; /* blue */
+}
+.db-fill {
+    background-color: #FF9800; /* orange */
+}
+
+.progress-count {
+    font-weight: bold;
+    font-size: 0.9rem;
+    display: inline-block;
+    margin-top: 0.2rem;
+}
 
 /* This is the home page styling: */
 .home-hero {
