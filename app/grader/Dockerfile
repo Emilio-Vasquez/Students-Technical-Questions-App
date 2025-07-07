@@ -29,4 +29,6 @@ CMD ["python3"]
 ### >>> print(getpass.getuser())
 ### student
 
+## Build the image first: docker build -t safe-python-grader .
+
 ### ran this code: docker run --rm -it safe-python-grader

@@ -6,12 +6,15 @@ from .user_validators import is_username_available, is_email_available ## these 
 from .login import handle_login ## This is the function that handles the login to check if the username and password match
 from .feedback import handle_feedback ## This is the function the handles the feedback logic
 from .account_settings import handle_account_settings ## Need this to handle the get,post information to change account settings
+from .question_aggregates import get_question_counts ## Need this to get the aggregated counts of the questions
+from .user_submissions import store_user_submission ## store_user_submission function has the logic to store user submissions
 
 main = Blueprint('main', __name__)
 
 @main.route('/')
 def home():
-    return render_template('home.html')
+    counts = get_question_counts()
+    return render_template('home.html', counts = counts)
 
 @main.route('/login', methods = ['GET','POST'])
 def login():
@@ -93,6 +96,17 @@ def question_detail(slug): ## The question.title will be obtained when the user 
             return redirect(url_for("main.question_detail", slug=slug))
 
         result = evaluate_submission(answer, question.get("expected_output"), language)  ## or language="sql" depending on question
+
+        if 'username' in session:
+            passed = (result == "Correct")  # or however you evaluate
+            store_user_submission(
+                username=session['username'],
+                slug=slug,
+                answer=answer,
+                language=language,
+                passed=passed
+            )
+
         flash(f"Your code was submitted. Current evaluation: {result}", "info")
         return redirect(url_for("main.question_detail", slug=slug))
     

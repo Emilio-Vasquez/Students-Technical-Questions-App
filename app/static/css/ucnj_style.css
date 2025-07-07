@@ -520,3 +520,63 @@ body {
 .account-form button:hover {
     background-color: #8c1420;
 }
+
+
+/* This is the home page styling: */
+.home-hero {
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.home-hero h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.home-hero p {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.primary-cta {
+    display: inline-block;
+    background-color: #670b14;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 1rem;
+}
+
+.primary-cta:hover {
+    background-color: #8c1420;
+}
+
+.question-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.stat-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 200px;
+}
+
+.stat-card h2 {
+    font-size: 2rem;
+    margin: 0;
+    color: #670b14;
+}
+
+.stat-card p {
+    margin: 0.5rem 0 0 0;
+    color: #333;
+}
