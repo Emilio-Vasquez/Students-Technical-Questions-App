@@ -19,7 +19,7 @@ def store_user_submission(username, slug, answer, language, passed):
         """, (username,))
         user_row = cursor.fetchone()
         if user_row:
-            user_id = user_row[0]
+            user_id = user_row['id']
             # check if record exists
             cursor.execute("""
                 SELECT id FROM user_submissions

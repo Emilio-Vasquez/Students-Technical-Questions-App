@@ -1,6 +1,7 @@
 import tempfile, subprocess, os  ## we want to make a temporary file and put what the student wrote in there
 
 def evaluate_python(user_code, expected_output):
+    import tempfile, subprocess, os
 
     with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as tmp:
         tmp.write(user_code)
@@ -22,11 +23,28 @@ def evaluate_python(user_code, expected_output):
         errors = result.stderr.strip()
         os.remove(tmp_path)
 
+        # evaluation
         if errors:
-            return f"Error: {errors}"
-        if output == expected_output:
-            return "✅ Pass!"
+            evaluation = f"❌ Error: {errors}"
+        elif output == expected_output:
+            evaluation = "✅ Pass!"
         else:
-            return f"❌ Fail. Got: {output}, Expected: {expected_output}"
+            evaluation = f"❌ Fail: Output does not match expected."
+
+        MAX_OUTPUT_LINES = 20
+
+        if output:
+            output_lines = output.splitlines()
+            if len(output_lines) > MAX_OUTPUT_LINES:
+                displayed_output = "\n".join(output_lines[:MAX_OUTPUT_LINES]) + "\n...(truncated)..."
+            else:
+                displayed_output = output
+        else:
+            displayed_output = "(no output)"
+
+        # return BOTH evaluation + user output
+        return evaluation, displayed_output
+    
     except subprocess.TimeoutExpired:
-        return "❌ Fail: Code timed out."
+        os.remove(tmp_path)
+        return "❌ Fail: Code timed out.", "(no output)"

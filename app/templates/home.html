@@ -3,23 +3,23 @@
 
 {% block content %}
 <div class="home-hero">
-  <h1>Sharpen Your Technical Skills</h1>
-  <p>Practice Python and SQL questions designed for Computer Science, Data Science, and Databases classes.</p>
-  <a href="{{ url_for('main.questions') }}" class="primary-cta">Start Practicing</a>
+    <h1>Sharpen Your Technical Skills</h1>
+    <p>Practice Python and SQL questions designed for Computer Science, Data Science, and Databases classes.</p>
+    <a href="{{ url_for('main.questions') }}" class="primary-cta">Start Practicing</a>
 </div>
 
 <div class="question-stats">
-  <div class="stat-card">
-    <h2>{{ counts.compsci }}</h2>
-    <p>Computer Science Questions</p>
-  </div>
-  <div class="stat-card">
-    <h2>{{ counts.datasci }}</h2>
-    <p>Data Science Questions</p>
-  </div>
-  <div class="stat-card">
-    <h2>{{ counts.databases }}</h2>
-    <p>Database Questions</p>
-  </div>
+    <div class="stat-card">
+        <h2>{{ counts.compsci }}</h2>
+        <p>Computer Science Questions</p>
+    </div>
+    <div class="stat-card">
+        <h2>{{ counts.datasci }}</h2>
+        <p>Data Science Questions</p>
+    </div>
+    <div class="stat-card">
+        <h2>{{ counts.databases }}</h2>
+        <p>Database Questions</p>
+    </div>
 </div>
 {% endblock %}

@@ -81,24 +81,30 @@ def questions():
 @main.route('/question_detail/<string:slug>', methods = ['GET','POST']) ## slug is the question title, but in a route friendly syntax
 def question_detail(slug): ## The question.title will be obtained when the user clicks the question from the questions.html page
     questions = load_questions() ## getting the questions from the questions.py, which loads a function to open and read the json file with the data
-    question = next((q for q in questions if q['slug'] == slug), None) ## This basically searches for the question the user picked based on the slug
+    question = next((q for q in questions if q['slug'] == slug), None)
+
     if not question:
         flash("Question is not found", "danger")
-        return redirect(url_for('main.questions')) ## if the question is not found, display question is not found and redirect to the questions overview page
+        return redirect(url_for('main.questions'))
     
+    submitted_answer = None
+    evaluation = None
+    user_output = None
+
     if request.method == 'POST':
         answer = request.form.get("answer")
-        language = request.form.get("language")  ## grabs dropdown value
+        language = request.form.get("language")
 
-        ## validating that language chosen is within the scope of our questions
         if language not in ["python", "sql"]:
             flash("Invalid language selection", "danger")
             return redirect(url_for("main.question_detail", slug=slug))
 
-        result = evaluate_submission(answer, question.get("expected_output"), language)  ## or language="sql" depending on question
+        # your evaluation function
+        result = evaluate_submission(answer, question.get("expected_output"), language)
 
+        # store
         if 'username' in session:
-            passed = (result == "Correct")  # or however you evaluate
+            passed = (result == "Correct")  # adjust as you wish
             store_user_submission(
                 username=session['username'],
                 slug=slug,
@@ -107,10 +113,18 @@ def question_detail(slug): ## The question.title will be obtained when the user 
                 passed=passed
             )
 
-        flash(f"Your code was submitted. Current evaluation: {result}", "info")
-        return redirect(url_for("main.question_detail", slug=slug))
-    
-    return render_template('question_detail.html', question=question)
+        # we want to show these on the page
+        submitted_answer = answer
+        evaluation, user_output = evaluate_submission(answer, question.get("expected_output"), language)  # if you want to display “their code” as “their output”
+        # you could swap in real execution output if you have it
+
+    return render_template(
+        "question_detail.html",
+        question=question,
+        evaluation=evaluation,
+        submitted_answer=answer,
+        user_output=user_output
+    )
 
 @main.route('/logout') ## Flask automatically uses GET method if you don't specify, so when the user clciks the button it redirects
 def logout():

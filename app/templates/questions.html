@@ -29,10 +29,22 @@
             <table class="questions-table">
                 <thead>
                     <tr>
-                        <th>Title</th>
+                        <th class="sortable" data-column="title">
+                            Title
+                            <span class="sort-icons">
+                                <span class="asc">▲</span>
+                                <span class="desc">▼</span>
+                            </span>
+                        </th>
                         <th>Prompt</th>
                         <th>Language</th>
-                        <th>Difficulty</th>
+                        <th class="sortable" data-column="difficulty">
+                            Difficulty
+                            <span class="sort-icons">
+                                <span class="asc">▲</span>
+                                <span class="desc">▼</span>
+                            </span>
+                        </th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -44,7 +56,11 @@
                         <td>{{ q.title }}</td>
                         <td>{{ q.prompt | truncate(150) }}</td>
                         <td>{{ q.language|capitalize }}</td>
-                        <td>{{ q.difficulty }}</td>
+                        <td>
+                            <span class="difficulty-badge {{ q.difficulty|lower }}">
+                                {{ q.difficulty }}
+                            </span>
+                        </td>
                         <td>
                             <a href="{{ url_for('main.question_detail', slug=q.slug) }}" class="attempt-button">Attempt</a>
                         </td>
@@ -60,4 +76,6 @@
 
 <!-- Adding this js file so that we can have interactive filters for the category buttons -->
 <script src="{{ url_for('static', filename='js/question_filter.js') }}"></script>
+<!-- This js file below is used for filtering the columns title and diffuclty (asecnding and descending) -->
+<script src="{{ url_for('static', filename='js/question_sort.js') }}"></script>
 {% endblock %}

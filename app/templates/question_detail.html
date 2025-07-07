@@ -6,6 +6,7 @@
 <div class="question-detail-container">
     <h2>{{ question.title }}</h2>
     <p>{{ question.prompt }}</p>
+
     <form method="post" action="{{ url_for('main.question_detail', slug=question.slug) }}">
         <div>
             <label for="language">Language:</label>
@@ -16,12 +17,34 @@
         </div>
         <div>
             <label for="answer">Your Solution:</label>
-            <textarea name="answer" id="answer" rows="10" placeholder="Type your code or query here..." required></textarea>
+            <textarea name="answer" id="answer" rows="15" required placeholder="Write your code here...">{{ submitted_answer if submitted_answer }}</textarea>
         </div>
-        <div>
-            <button type="submit">Submit</button>
-        </div>
+        <button type="submit">Submit</button>
     </form>
+
+    {% if evaluation %}
+    <div class="evaluation-box">
+        <h3>Evaluation Results</h3>
+
+        <div class="output-box">
+            <strong>Expected Output:</strong>
+            <pre><code class="language-{{ question.language }}">{{ question.expected_output }}</code></pre>
+        </div>
+
+        <div class="output-box">
+            <strong>Your Output:</strong>
+            <pre><code class="language-{{ question.language }}">{{ user_output }}</code></pre>
+        </div>
+
+        <div class="output-box">
+            <strong>Your Submitted Code:</strong>
+            <pre><code class="language-{{ question.language }}">{{ submitted_answer }}</code></pre>
+        </div>
+
+        <p class="evaluation-status">{{ evaluation }}</p>
+    </div>
+    {% endif %}
+
     <p>
         <a href="{{ url_for('main.questions') }}" class="back-button">← Back to Questions</a>
     </p>

@@ -182,6 +182,34 @@ body {
     margin-top: 0.5rem;
 }
 
+.difficulty-badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+/* Easy */
+.difficulty-badge.easy {
+  color: darkgreen;
+  background-color: #d4edda;
+  border: 1px solid darkgreen;
+}
+
+/* Medium */
+.difficulty-badge.medium {
+  color: #8b4513; /* saddle brown / dark orange */
+  background-color: #faebd7; /* antique white / light beige */
+  border: 1px solid #8b4513;
+}
+
+/* Hard */
+.difficulty-badge.hard {
+  color: darkred;
+  background-color: #f8d7da;
+  border: 1px solid darkred;
+}
+
 /* Main Questions List */
 .questions-list {
     flex: 1;
@@ -266,6 +294,34 @@ body {
     background-color: #8c1420;
 }
 
+/* Filter icons to order ascending or descending on title and difficulty on questions.html */
+.sortable {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem; /* spacing between text and icons */
+}
+
+.sort-icons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.6rem;
+  color: gray;
+  cursor: pointer;
+  line-height: 0.6rem;
+}
+.sort-icons .asc,
+.sort-icons .desc {
+    color: lightgray;   /* always light gray when inactive */
+}
+
+.sort-icons.active-asc .asc {
+    color: #7c7676; /* darker gray when active */
+}
+.sort-icons.active-desc .desc {
+    color: #7c7676; /* darker gray when active */
+}
+
 /* Question Detail Styling */
 .question-detail-container {
     max-width: 800px;
@@ -298,6 +354,21 @@ body {
 
 .question-detail-container button:hover {
     background-color: #8c1420;
+}
+
+/* This is still for the question detail, just for it's evaluation box: */
+.evaluation-box {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #f0f0f0;
+  border-left: 4px solid #670b14;
+  border-radius: 6px;
+}
+.output-box {
+  margin-bottom: 1rem;
+}
+.evaluation-status {
+  font-weight: bold;
 }
 
 .back-button {

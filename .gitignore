@@ -48,5 +48,8 @@ VirtualEnv/
 # ## Any workspace data:
 # *.code-workspace
 
+## init
+__init__.py
+
 # ## Config file
 # config.py
