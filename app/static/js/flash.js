@@ -12,6 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
                 flash.remove();
             }, 500);
-        }, 4000); // 4 seconds delay
+        }, 2000); // 2 seconds delay
     });
 });

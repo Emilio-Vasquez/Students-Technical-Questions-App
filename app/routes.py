@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
-from .questions import load_questions ## this will load the questions up for us (function)
-from .questions import evaluate_submission ## importing the evaluate_submission function
+from .questions import load_questions, evaluate_submission ## importing the evaluate_submission function, this will load the questions up for us (function)
 from .register import handle_registration ## This imports the function that handles the registration steps
 from .user_validators import is_username_available, is_email_available ## these are the functions that we use to see if email and usernames are valid
 from .login import handle_login ## This is the function that handles the login to check if the username and password match
@@ -9,6 +8,7 @@ from .account_settings import handle_account_settings ## Need this to handle the
 from .question_aggregates import get_question_counts ## Need this to get the aggregated counts of the questions
 from .user_submissions import store_user_submission ## store_user_submission function has the logic to store user submissions
 from .db import get_db_connection ## getting the database connection
+from .sql_table_metadata import extract_sql_metadata ## This gets the sql metadata to give to the user for a nice table display on their questions
 
 main = Blueprint('main', __name__)
 
@@ -111,6 +111,11 @@ def question_detail(slug): ## The question.title will be obtained when the user 
     evaluation = None
     user_output = None
 
+    if question["language"] == "sql" and question.get("setup_sql"):
+        table_metadata = extract_sql_metadata(question["setup_sql"])
+    else:
+        table_metadata = None
+
     if request.method == 'POST':
         answer = request.form.get("answer")
         language = request.form.get("language")
@@ -120,7 +125,12 @@ def question_detail(slug): ## The question.title will be obtained when the user 
             return redirect(url_for("main.question_detail", slug=slug))
 
         # your evaluation function
-        evaluation, user_output = evaluate_submission(answer, question.get("expected_output"), language)
+        evaluation, user_output = evaluate_submission(
+            answer,
+            question.get("expected_output"),
+            language,
+            question.get("setup_sql")
+        )
 
         if 'username' in session:
             passed = evaluation.startswith("✅")
@@ -144,7 +154,8 @@ def question_detail(slug): ## The question.title will be obtained when the user 
         evaluation=evaluation,
         submitted_answer=submitted_answer if submitted_answer else "",  # safely default to blank
         user_output=user_output,
-        previous_language=previous_language
+        previous_language=previous_language,
+        table_metadata=table_metadata
     )
 
 @main.route('/logout') ## Flask automatically uses GET method if you don't specify, so when the user clciks the button it redirects

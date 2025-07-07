@@ -49,7 +49,7 @@ VirtualEnv/
 # *.code-workspace
 
 ## init
-__init__.py
+# __init__.py
 
 # ## Config file
 # config.py

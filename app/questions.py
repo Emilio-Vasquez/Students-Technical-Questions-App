@@ -9,10 +9,10 @@ def load_questions():
     ## in this json file, you will see: "slug", we use "slugs" because they're route friendly, not having uppercase or spaces.
     ## There are no comments allowed in json so we had to remove all comments
     ## JSON also uses double quotes for all keys and strings
-    with open(file_path, 'r') as f:
+    with open('app/data/questions.json', encoding='utf-8') as f:
         return json.load(f) ## this is to open and read the files
 
-def evaluate_submission(user_code, expected_output, language="python"):
+def evaluate_submission(user_code, expected_output, language="python", setup_sql=None):
     """
     Just finished the Dockerfile and tested it, should be fine now
 
@@ -23,6 +23,6 @@ def evaluate_submission(user_code, expected_output, language="python"):
     if language == "python":
         return evaluate_python(user_code, expected_output)
     elif language == "sql":
-        return evaluate_sql(user_code, expected_output)
+        return evaluate_sql(user_code, expected_output, setup_sql)
     else:
-        return "Unknown language. Cannot evaluate."
+        return "Unknown language. Cannot evaluate.", "(no output)"

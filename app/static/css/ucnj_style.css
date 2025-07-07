@@ -386,6 +386,50 @@ body {
     background-color: #8c1420;
 } /* AFter clicking the button it will stay highlighted */
 
+/* This is still question_detail styling, but for the table the user see's: */
+.table-block {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fafafa;
+    padding: 0.5rem 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.table-block h5 {
+    text-align: center;
+    margin: 0.3rem 0 0.6rem 0;
+    font-size: 1rem;
+}
+
+.table-block p {
+    margin: 0.2rem 0;
+    font-weight: 500;
+}
+
+.table-block table {
+    margin: 0 auto 0.8rem auto;
+    border-collapse: collapse;
+    width: auto;
+    font-size: 0.85rem;
+}
+
+.table-block th,
+.table-block td {
+    padding: 2px 6px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+.table-block thead {
+    background-color: #f1f1f1;
+}
+
+.sample-table-wrapper {
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+}
+
 /* Let's also make the header responsive based on the pixel sizes of the screen */
 @media (max-width: 768px) {
     header {
