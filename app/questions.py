@@ -12,17 +12,41 @@ def load_questions():
     with open('app/data/questions.json', encoding='utf-8') as f:
         return json.load(f) ## this is to open and read the files
 
-def evaluate_submission(user_code, expected_output, language="python", setup_sql=None):
+def evaluate_submission(user_code, test_cases, language="python", function_signature=None):
     """
-    Just finished the Dockerfile and tested it, should be fine now
-
-    Dispatches student code to the appropriate grader:
-    - Python code runs in a Docker sandbox
-    - SQL code runs in a local SQLite in-memory test
+    Dispatches user code to the appropriate evaluator with all test case metadata.
+    Returns full evaluation results for frontend display.
     """
     if language == "python":
-        return evaluate_python(user_code, expected_output)
+        signature = function_signature or "def solution():"
+        return evaluate_python(user_code, test_cases, signature)
+
     elif language == "sql":
-        return evaluate_sql(user_code, expected_output, setup_sql)
+        evaluations = []
+        for idx, case in enumerate(test_cases):
+            result, output = evaluate_sql(
+                user_code,
+                case["expected_output"],
+                case.get("setup_sql")
+            )
+            evaluations.append({
+                "description": case.get("description", f"Test case {idx + 1}"),
+                "input": case.get("input", "N/A"),  # SQL might not have this
+                "expected": case["expected_output"],
+                "result": output,
+                "passed": result.startswith("✅"),
+                "error": None if result.startswith("✅") else result,
+                "time": "N/A"  # You can optionally add timing here
+            })
+        return evaluations
+
     else:
-        return "Unknown language. Cannot evaluate.", "(no output)"
+        return [{
+            "description": "Unknown language",
+            "input": None,
+            "expected": None,
+            "result": None,
+            "passed": False,
+            "error": "Unsupported language",
+            "time": "N/A"
+        }]

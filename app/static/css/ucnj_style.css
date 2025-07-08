@@ -437,6 +437,39 @@ body {
     overflow-x: auto;
 }
 
+/* test cases styling */
+.test-case-box {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background-color: #f9f9f9;
+    transition: 0.3s ease-in-out;
+}
+
+.test-case-box.pass {
+    border-left: 6px solid #28a745;
+    background-color: #e6ffed;
+}
+
+.test-case-box.fail {
+    border-left: 6px solid #dc3545;
+    background-color: #ffeaea;
+}
+
+.test-case-box summary {
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.test-case-box pre {
+    background: #fff;
+    padding: 0.75rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    border: 1px solid #ddd;
+}
+
 /* Let's also make the header responsive based on the pixel sizes of the screen */
 @media (max-width: 768px) {
     header {

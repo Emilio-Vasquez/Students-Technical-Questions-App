@@ -9,6 +9,7 @@ from .question_aggregates import get_question_counts ## Need this to get the agg
 from .user_submissions import store_user_submission ## store_user_submission function has the logic to store user submissions
 from .db import get_db_connection ## getting the database connection
 from .sql_table_metadata import extract_sql_metadata ## This gets the sql metadata to give to the user for a nice table display on their questions
+import json
 
 main = Blueprint('main', __name__)
 
@@ -81,16 +82,38 @@ def questions():
 
 @main.route('/question_detail/<string:slug>', methods = ['GET','POST']) ## slug is the question title, but in a route friendly syntax
 def question_detail(slug): ## The question.title will be obtained when the user clicks the question from the questions.html page
-    questions = load_questions() ## getting the questions from the questions.py, which loads a function to open and read the json file with the data
-    question = next((q for q in questions if q['slug'] == slug), None)
+    conn = get_db_connection()
+    with conn.cursor() as cursor:
+        cursor.execute("SELECT * FROM questions WHERE slug = %s", (slug,))
+        question = cursor.fetchone()
 
-    if not question:
-        flash("Question is not found", "danger")
-        return redirect(url_for('main.questions'))
+        if not question:
+            flash("Question is not found", "danger")
+            return redirect(url_for('main.questions'))
+
+        # Load associated test cases
+        cursor.execute("""
+            SELECT description, input, expected_output, setup_sql
+            FROM question_test_cases
+            WHERE question_id = %s
+        """, (question["id"],))
+        test_cases = cursor.fetchall()
+
+        # Convert JSON fields
+        for case in test_cases:
+            case["input"] = json.loads(case["input"]) if case["input"] else None
+            case["expected_output"] = json.loads(case["expected_output"]) if case["expected_output"] else None
+
+        # Attach test cases to the question dictionary
+        question["test_cases"] = test_cases
+
+    conn.close()
     
     previous_answer = None
     previous_language = question["language"]  # fallback default
+    evaluation_results = None  # store multiple test results here
 
+    # Get user’s last submission if logged in
     if 'username' in session:
         conn = get_db_connection()
         with conn.cursor() as cursor:
@@ -106,15 +129,10 @@ def question_detail(slug): ## The question.title will be obtained when the user 
                 previous_language = row["language"]
         conn.close()
 
-    answer = ""
-    submitted_answer = previous_answer  # prepopulate with their latest
-    evaluation = None
-    user_output = None
-
-    if question["language"] == "sql" and question.get("setup_sql"):
-        table_metadata = extract_sql_metadata(question["setup_sql"])
-    else:
-        table_metadata = None
+    submitted_answer = previous_answer
+    table_metadata = extract_sql_metadata(
+        question["test_cases"][0]["setup_sql"]
+    ) if question["language"] == "sql" and question.get("test_cases") else None
 
     if request.method == 'POST':
         answer = request.form.get("answer")
@@ -124,36 +142,34 @@ def question_detail(slug): ## The question.title will be obtained when the user 
             flash("Invalid language selection", "danger")
             return redirect(url_for("main.question_detail", slug=slug))
 
-        # your evaluation function
-        evaluation, user_output = evaluate_submission(
+        function_signature = question.get("function_signature") or "def solution():"
+        # ✅ Run evaluation for each test case
+        evaluation_results = evaluate_submission(
             answer,
-            question.get("expected_output"),
-            language,
-            question.get("setup_sql")
+            test_cases=question.get("test_cases", []),
+            language=language,
+            function_signature=function_signature
         )
 
+        # ✅ Store the submission and its pass/fail status
         if 'username' in session:
-            passed = evaluation.startswith("✅")
+            passed_all = all(res["passed"] for res in evaluation_results)
             store_user_submission(
                 username=session['username'],
                 slug=slug,
                 answer=answer,
                 language=language,
-                passed=passed
+                passed=passed_all
             )
 
-        # we want to show these on the page
         submitted_answer = answer
-        previous_language = language ## Take this immediately so that it doesnt switch back to default language when you submit code for evaluation
-        ## duplicate call: evaluation, user_output = evaluate_submission(answer, question.get("expected_output"), language)  # if you want to display “their code” as “their output”
-        # you could swap in real execution output if you have it
+        previous_language = language
 
     return render_template(
         "question_detail.html",
         question=question,
-        evaluation=evaluation,
-        submitted_answer=submitted_answer if submitted_answer else "",  # safely default to blank
-        user_output=user_output,
+        submitted_answer=submitted_answer or "",
+        evaluation_results=evaluation_results,  # ✅ pass full list
         previous_language=previous_language,
         table_metadata=table_metadata
     )
