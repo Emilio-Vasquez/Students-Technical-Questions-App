@@ -6,7 +6,7 @@ import textwrap
 def evaluate_python(user_code, test_cases, function_signature):
     """
     Evaluates Python code by injecting test cases and capturing output for each case.
-    Uses the full function_signature string (e.g., 'def two_sum(nums, target):')
+    Uses the full function_signature string (example: 'def two_sum(nums, target):')
     Automatically wraps the user code inside the function definition.
     """
 

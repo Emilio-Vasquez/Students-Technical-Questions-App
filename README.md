@@ -21,33 +21,71 @@ The main goal of this project is to:
 Technical-Questions-App/
 ├── app/
 │   ├── __init__.py
-│   ├── routes.py
-│   ├── db.py
-│   ├── register.py
-│   ├── login.py
-│   ├── feedback.py
 │   ├── account_settings.py
-│   ├── user_validators.py
-│   ├── user_submissions.py
+│   ├── db.py
+│   ├── feedback.py
+│   ├── forgot_password.py
+│   ├── login.py
+│   ├── mailer.py
+│   ├── python_evaluator.py
 │   ├── question_aggregates.py
 │   ├── questions.py
-│   ├── python_evaluator.py
+│   ├── register.py
+│   ├── reset_password.py
+│   ├── routes.py
 │   ├── sql_evaluator.py
+│   ├── sql_table_metadata.py
+│   ├── user_submissions.py
+│   ├── user_validators.py
+│   ├── data/
+│   │   └── questions.json
 │   ├── grader/
 │   │   └── Dockerfile
+│   ├── scripts/
+│   │   ├── migrate_questions.py
+│   │   └── migrate_test_cases.py
 │   ├── static/
 │   │   ├── css/
+│   │   │   └── ucnj_style.css
+│   │   ├── images/
+│   │   │   ├── emilio.PNG
+│   │   │   └── favicon.ico
 │   │   ├── js/
-│   │   └── images/
+│   │   │   ├── account_settings.js
+│   │   │   ├── code_editor.js
+│   │   │   ├── flash.js
+│   │   │   ├── login.js
+│   │   │   ├── question_filter.js
+│   │   │   ├── question_sort.js
+│   │   │   ├── register.js
+│   │   │   └── reset_password.js
 │   ├── templates/
-│   ├── data/
-│   └── test/
+│   │   ├── account_settings.html
+│   │   ├── base.html
+│   │   ├── feedback.html
+│   │   ├── forgot_password.html
+│   │   ├── home.html
+│   │   ├── login.html
+│   │   ├── question_detail.html
+│   │   ├── questions.html
+│   │   ├── register.html
+│   │   └── reset_password.html
+│   ├── test/
+│   │   ├── test_email_sender.py
+│   │   ├── test_mysql_connection.py
+│   │   ├── test_python_evaluator.py
+│   │   └── test_sql_evaluator.py
+├── database/
+│   ├── schema.sql
+│   └── README.md
 ├── .env
 ├── .gitignore
 ├── config.py
-├── requirements.txt
+├── database_queries.sql
+├── LICENSE
+├── README.md
 ├── run.py
-└── database_queries.sql
+└── student_code.py
 ```
 
 ## Key Features
