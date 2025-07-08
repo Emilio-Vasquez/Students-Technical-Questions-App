@@ -1,14 +1,40 @@
 {% extends "base.html" %}
-{% block title %}Home - Technical Questions App{% endblock %}
+{% block title %}Welcome - Professor Emilio Vasquez{% endblock %}
 
 {% block content %}
-<div class="home-hero">
-    <h1>Sharpen Your Technical Skills</h1>
-    <p>Practice Python and SQL questions designed for Computer Science, Data Science, and Databases classes.</p>
-    <a href="{{ url_for('main.questions') }}" class="primary-cta">Start Practicing</a>
+<div class="home-hero" style="text-align: center;">
+    <img src="{{ url_for('static', filename='images/emilio.png') }}" alt="Professor Emilio Vasquez" style="width: 140px; border-radius: 50%; margin-bottom: 1rem;">
+    <h1>Welcome to the Technical Practice Portal</h1>
+    <p><strong>Professor Emilio Vasquez</strong><br>
+       Union College of Union County, NJ (UCNJ)</p>
 </div>
 
-<div class="question-stats">
+<div class="info-section" style="max-width: 800px; margin: 2rem auto;">
+    <p>This portal is designed to support your learning through hands-on practice in <strong>Python programming</strong>, <strong>databases</strong>, and <strong>data science</strong>. Your assignments on this platform will count directly toward your course grade.</p>
+
+    <h3>Course Requirements</h3>
+    <ul>
+        <li><strong>CST-161 – Python Programming:</strong> Complete all <em>Computer Science</em> questions.</li>
+        <li><strong>CST-204 – Databases:</strong> Complete all <em>Database</em> questions.</li>
+        <li><strong>CST-206 – Data Science (Optional):</strong> Explore <em>Data Science</em> questions to reinforce concepts taught in class.</li>
+    </ul>
+
+    <h3>Grading Breakdown</h3>
+    <ul>
+        <li>Easy questions: <strong>50 points</strong></li>
+        <li>Medium questions: <strong>100 points</strong></li>
+        <li>Hard questions: <strong>150 points</strong></li>
+    </ul>
+
+    <p><strong>Important:</strong> Your progress will be monitored. Please complete your assigned problems by the deadlines provided in class.</p>
+    <p>This platform is not only a homework tracker, it’s a professional tool to help you prepare for technical interviews, build practical skills, and deepen your understanding of programming and data systems.</p>
+
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="{{ url_for('main.questions') }}" class="primary-cta">View Questions</a>
+    </div>
+</div>
+
+<div class="question-stats" style="margin-top: 3rem;">
     <div class="stat-card">
         <h2>{{ counts.compsci }}</h2>
         <p>Computer Science Questions</p>

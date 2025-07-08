@@ -1,6 +1,11 @@
 from flask import request, session, redirect, url_for, flash, render_template
 from .db import get_db_connection
 import bcrypt
+import random
+import string
+from datetime import datetime, timedelta
+from flask_mail import Message
+from .mailer import mail
 
 def handle_account_settings():
     if 'username' not in session:
@@ -11,11 +16,12 @@ def handle_account_settings():
     with conn.cursor() as cursor:
         # get user details
         cursor.execute("""
-            SELECT id, username, email, phone, password
+            SELECT id, username, email, phone, password, is_verified
             FROM users
             WHERE LOWER(username) = LOWER(%s)
         """, (session['username'],))
         user = cursor.fetchone()
+        is_verified = bool(user.get("is_verified", False))
 
         if not user:
             conn.close()
@@ -95,7 +101,69 @@ def handle_account_settings():
                 return redirect(url_for('main.account_settings'))
 
         elif action == "verify_email":
-            flash("A verification email would be sent here (logic to implement).", "info")
+            verification_code = ''.join(random.choices(string.digits, k=6))
+            expires_at = datetime.utcnow() + timedelta(minutes=10)
+
+            conn = get_db_connection()
+            with conn.cursor() as cursor:
+                # Invalidate any previous unused codes
+                cursor.execute("""
+                    UPDATE email_verifications
+                    SET is_used = TRUE
+                    WHERE user_id = %s AND is_used = FALSE
+                """, (user_id,))
+
+                # Insert new verification record
+                cursor.execute("""
+                    INSERT INTO email_verifications (user_id, verification_code, expires_at)
+                    VALUES (%s, %s, %s)
+                """, (user_id, verification_code, expires_at))
+                conn.commit()
+
+            # Send the verification email
+            msg = Message("Verify your email",
+                        recipients=[user["email"]])
+            msg.body = f"""Hi {user['username']},
+
+        Here is your verification code: {verification_code}
+
+        It will expire in 10 minutes.
+
+        If you didn’t request this, you can ignore it.
+        """
+            mail.send(msg)
+
+            flash("Verification code sent to your email.", "success")
+            conn.close()
+            return redirect(url_for('main.account_settings'))
+        
+        elif action == "submit_verification_code":
+            code_entered = request.form.get("verification_code").strip()
+
+            conn = get_db_connection()
+            with conn.cursor() as cursor:
+                cursor.execute("""
+                    SELECT id FROM email_verifications
+                    WHERE user_id = %s AND verification_code = %s
+                    AND is_used = FALSE AND expires_at > NOW()
+                """, (user_id, code_entered))
+                row = cursor.fetchone()
+
+                if row:
+                    cursor.execute("""
+                        UPDATE users SET is_verified = TRUE WHERE id = %s
+                    """, (user_id,))
+                    cursor.execute("""
+                        UPDATE email_verifications SET is_used = TRUE WHERE id = %s
+                    """, (row["id"],))
+                    conn.commit()
+                    flash("Your email has been successfully verified!", "success")
+                else:
+                    flash("Invalid or expired verification code.", "danger")
+
+            conn.close()
+            return redirect(url_for('main.account_settings'))
+
 
     return render_template(
         "account_settings.html",
@@ -103,5 +171,6 @@ def handle_account_settings():
         email=user["email"],
         phone=user["phone"] if user["phone"] else "",
         progress=progress,
-        totals=totals
+        totals=totals,
+        is_verified=is_verified
     )

@@ -56,5 +56,5 @@ def evaluate_sql(user_query, expected_output, setup_sql=None):
     finally:
         conn.close()
 
-    result = f"✅ Passed ({elapsed} ms)" if passed else f"❌ Failed ({elapsed} ms) — {error or 'Output mismatch'}"
+    result = f"✅ Passed ({elapsed} ms)" if passed else f"❌ Failed ({elapsed} ms), {error or 'Output mismatch'}"
     return result, output_rows

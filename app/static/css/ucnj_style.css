@@ -777,3 +777,23 @@ body {
     margin: 0.5rem 0 0 0;
     color: #333;
 }
+
+/* This is the pagination styling: */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a,
+.pagination strong {
+    margin: 0 5px;
+    padding: 6px 12px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    color: #333;
+}
+
+.pagination strong {
+    background-color: #ddd;
+    font-weight: bold;
+}

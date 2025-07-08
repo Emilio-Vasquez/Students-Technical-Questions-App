@@ -78,7 +78,22 @@ def questions():
     ## Now this 'questions' variable holds the list of questions that will be displayed in the html page
     ## We will send this by saying, once we render_template, the data we pass through it will be the 'questions' variable.
     ## This is second argument: questions = questions, that's how the data gets passed to the HTML
-    return render_template('questions.html', questions = questions)
+    page = request.args.get('page', 1, type=int)  # Default to page 1
+    per_page = 20
+
+    total = len(questions)
+    start = (page - 1) * per_page
+    end = start + per_page
+    paginated_questions = questions[start:end]
+
+    total_pages = (total + per_page - 1) // per_page  # ceiling division
+
+    return render_template(
+        'questions.html',
+        questions=paginated_questions,
+        current_page=page,
+        total_pages=total_pages
+    )
 
 @main.route('/question_detail/<string:slug>', methods = ['GET','POST']) ## slug is the question title, but in a route friendly syntax
 def question_detail(slug): ## The question.title will be obtained when the user clicks the question from the questions.html page

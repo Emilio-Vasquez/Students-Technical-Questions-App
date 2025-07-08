@@ -19,6 +19,12 @@
         <div>
             <button type="submit">Login</button>
         </div>
+        <!-- This div is for the forget password button -->
+        <div style="text-align: center; margin-top: 0.75rem;">
+            <a href="{{ url_for('forgot_password.forgot_password') }}" style="font-size: 0.9rem; color: #007bff; text-decoration: underline;">
+                Forgot Password?
+            </a>
+        </div>
     </form>
     <p style="text-align:center; margin-top:1rem;">
         Don't have an account? <a href="{{ url_for('main.register') }}">Register here</a>.

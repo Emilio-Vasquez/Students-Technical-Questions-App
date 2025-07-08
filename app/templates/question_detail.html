@@ -97,7 +97,7 @@
             <div class="test-case-box {% if test.passed %}pass{% else %}fail{% endif %}">
                 <details>
                     <summary>
-                        <strong>Test {{ loop.index }}:</strong> {{ test.description }} —
+                        <strong>Test {{ loop.index }}:</strong> {{ test.description }},
                         {% if test.passed %}✅ Pass{% else %}❌ Fail{% endif %}
                         <span style="float: right;">{{ test.time }}</span>
                     </summary>

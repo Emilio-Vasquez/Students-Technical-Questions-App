@@ -52,4 +52,14 @@ document.addEventListener("DOMContentLoaded", function() {
         submitBtn.textContent = "Logging in... ⏳";
         submitBtn.style.cursor = "not-allowed";
     });
+
+    const forgotLink = document.getElementById("forgot-password-link");
+    if (forgotLink) {
+        forgotLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            alert("Password reset instructions would be sent (feature not implemented yet).");
+            // You can later redirect like this:
+            // window.location.href = "/forgot_password";
+        });
+    }
 });

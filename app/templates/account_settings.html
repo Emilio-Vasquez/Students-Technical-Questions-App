@@ -9,9 +9,34 @@
     <div class="account-card">
         <h3>Profile Information</h3>
         <p><strong>Username:</strong> {{ username }}</p>
-        <p><strong>Email:</strong> {{ email }} 
-            <button id="verify-email-btn" class="small-btn action-btn">Verify Email</button>
+        <p><strong>Email:</strong> {{ email }}
+            {% if is_verified %}
+                <span style="color: green; font-weight: bold; margin-left: 10px;">✔ Verified</span>
+            {% else %}
+                <span style="color: red; font-weight: bold; margin-left: 10px;">✖ Not Verified</span>
+
+                <!-- Send Code Form -->
+                <form method="POST" id="send-code-form" style="display: inline;">
+                    <input type="hidden" name="action" value="verify_email">
+                    <button type="submit" class="small-btn action-btn">Send Code</button>
+                </form>
+
+                <!-- Hidden initially -->
+                <div id="code-entry" style="display: none; margin-top: 10px;">
+                    <form method="POST" id="verify-code-form">
+                        <input type="hidden" name="action" value="submit_verification_code">
+                        <label for="verification_code">Enter Code:</label>
+                        <input type="text" name="verification_code" required>
+                        <button type="submit" class="small-btn action-btn">Verify</button>
+                    </form>
+                </div>
+            {% endif %}
         </p>
+
+        {% if flash_message %}
+            <div class="flash">{{ flash_message }}</div>
+        {% endif %}
+
         <p><strong>Phone:</strong> {{ phone if phone else "Not set" }}
             <button id="toggle-phone-btn" class="small-btn action-btn">Add/Update</button>
         </p>
