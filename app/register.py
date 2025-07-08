@@ -1,3 +1,19 @@
+"""
+register.py
+
+Handles user registration, including backend validation and account creation.
+
+Responsibilities:
+- Validates username, email, and password against defined rules.
+- Prevents duplicate accounts by checking existing usernames/emails.
+- Hashes passwords using bcrypt before storing them securely.
+- Enforces all constraints regardless of frontend JavaScript checks.
+
+Function:
+- handle_registration(form): Main entry point for validating and creating new users.
+
+Author: Emilio Vasquez
+"""
 from .db import get_db_connection
 import bcrypt
 import re

@@ -1,4 +1,11 @@
-# app/forgot_password.py
+"""
+forgot_password.py
+
+Handles password reset requests by:
+- Validating user identity via username or email.
+- Generating a unique token and saving it in the database.
+- Sending a password reset email with an expiring link.
+"""
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .db import get_db_connection
 from .mailer import mail
@@ -10,6 +17,18 @@ forgot_password_bp = Blueprint('forgot_password', __name__)
 
 @forgot_password_bp.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
+    """
+    Endpoint for initiating a password reset request.
+
+    If the form is submitted with a valid username or email:
+    - A unique token is generated and stored with a 1-hour expiration.
+    - A password reset email is sent to the user's registered email address.
+    - The user is redirected to the login page with a success message.
+
+    Returns:
+        - GET: Renders the forgot_password.html form.
+        - POST: Handles lookup, token generation, email sending, and redirection.
+    """
     if request.method == 'POST':
         username_or_email = request.form.get('username_or_email').strip()
 

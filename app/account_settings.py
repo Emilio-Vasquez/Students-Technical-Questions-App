@@ -1,3 +1,14 @@
+"""
+account_settings.py
+
+Handles the display and update of user account settings including:
+- Changing password
+- Updating phone number
+- Email verification (via 6-digit code)
+- Showing question category progress
+
+Accessible only to logged-in users.
+"""
 from flask import request, session, redirect, url_for, flash, render_template
 from .db import get_db_connection
 import bcrypt
@@ -8,6 +19,19 @@ from flask_mail import Message
 from .mailer import mail
 
 def handle_account_settings():
+    """
+    Renders and handles all account settings logic.
+
+    GET: 
+        - Retrieves and displays user profile and progress data.
+    
+    POST:
+        - Handles password change, phone update, email verification,
+          and verification code submission depending on the `action` form field.
+
+    Returns:
+        A rendered template or redirect based on user actions and form results.
+    """
     if 'username' not in session:
         flash("Please login to access account settings", "danger")
         return redirect(url_for('main.login'))

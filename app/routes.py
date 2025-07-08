@@ -1,3 +1,25 @@
+"""
+routes.py
+
+Defines all user-facing Flask routes for the Technical Questions App.
+
+This includes:
+- Homepage
+- Login and registration
+- Real-time validation for username and email
+- Feedback submission
+- Viewing and attempting questions
+- Evaluating and storing code submissions
+- Account settings and logout functionality
+
+Each route integrates with modular logic across the app (ex: questions.py, login.py, user_validators.py),
+and handles interactions with the database and user session.
+
+Blueprint:
+- Registered under 'main'
+
+Author: Emilio Vasquez
+"""
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
 from .questions import load_questions, evaluate_submission ## importing the evaluate_submission function, this will load the questions up for us (function)
 from .register import handle_registration ## This imports the function that handles the registration steps

@@ -1,9 +1,28 @@
+"""
+SQL evaluation utility for comparing user-submitted queries to expected outputs.
+
+This module executes SQL against a temporary in-memory SQLite database.
+It supports normalization of outputs for flexible comparison and measures query performance.
+"""
 import sqlite3
 import time
 import json
 
 def normalize(value):
-    """Normalize nested results for type-agnostic comparison."""
+    """
+    Recursively normalize SQL output for comparison.
+
+    - Converts all numeric values to rounded floats (4 decimal places).
+    - Strips strings of whitespace.
+    - Flattens single-element lists/tuples.
+    - Ensures consistent data type representation for comparison.
+
+    Args:
+        value (any): A nested list, tuple, int, float, or string.
+
+    Returns:
+        any: Normalized representation (typically list of strings or floats).
+    """
     if isinstance(value, list) and len(value) == 1:
         return normalize(value[0])
     if isinstance(value, tuple) and len(value) == 1:
@@ -16,11 +35,18 @@ def normalize(value):
 
 def evaluate_sql(user_query, expected_output, setup_sql=None):
     """
-    Evaluates a SQL query against a set of test cases.
-    Each test case may contain:
-        - setup_sql: list or string of SQL setup statements
-        - expected_output: list of rows (list of tuples or lists)
-        - description: optional label
+    Executes a SQL query and compares the output to expected results.
+
+    Args:
+        user_query (str): The user's SQL query to evaluate.
+        expected_output (list): The expected output rows (as list of tuples or lists).
+        setup_sql (str or list, optional): SQL setup statements (e.g., CREATE TABLE, INSERTs)
+                                           provided as a single string or list of strings.
+
+    Returns:
+        tuple:
+            - result_msg (str): Pass/fail message including execution time or error reason.
+            - output_rows (list): Raw result from executing the user_query.
     """
     if isinstance(setup_sql, str):
         setup_sql = [stmt.strip() for stmt in setup_sql.split(";") if stmt.strip()]

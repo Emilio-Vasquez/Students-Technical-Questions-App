@@ -1,4 +1,19 @@
-# app/reset_password.py
+"""
+reset_password.py
+
+Handles the password reset functionality via a secure tokenized route.
+
+Key Features:
+- Validates token authenticity, expiration, and usage.
+- Ensures the new password is different from the previous one.
+- Uses bcrypt to securely hash the updated password.
+- Marks the reset token as used after successful reset.
+
+Route:
+- /reset_password/<token> (GET, POST)
+
+Author: Emilio Vasquez
+"""
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .db import get_db_connection
 import bcrypt

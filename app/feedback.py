@@ -1,6 +1,27 @@
+"""
+feedback.py
+
+Handles storing feedback submissions from users.
+Includes optional linking to a logged-in user via session.
+"""
 from .db import get_db_connection
 
 def handle_feedback(form, session):
+    """
+    Processes and stores user-submitted feedback in the database.
+
+    Args:
+        form (ImmutableMultiDict): The submitted feedback form containing:
+            - feedback_text (str): The user's feedback.
+            - category (str): The category of feedback (default: 'general').
+            - email (str): Optional email of the user.
+        session (dict): Flask session containing logged-in user info.
+
+    Returns:
+        tuple: (success: bool, message: str)
+            - success: True if feedback was stored, False otherwise.
+            - message: Confirmation or error message.
+    """
     feedback_text = form.get("feedback_text", "").strip()
     category = form.get("category", "general")
     email = form.get("email", "").strip()

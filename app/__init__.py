@@ -1,3 +1,9 @@
+"""
+__init__.py
+
+This module initializes the Flask application instance, configures extensions like Flask-Mail,
+registers blueprints for routing, and sets up global template filters.
+"""
 from flask import Flask
 from .routes import main
 from config import Config
@@ -7,6 +13,17 @@ from .forgot_password import forgot_password_bp
 from .reset_password import reset_password_bp
 
 def create_app():
+    """
+    Application factory for creating a configured Flask app.
+
+    - Loads configuration from Config class.
+    - Registers core blueprints (main app routes, forgot/reset password).
+    - Initializes Flask-Mail.
+    - Adds global Jinja2 filters for Markdown and language formatting.
+
+    Returns:
+        Flask: The fully configured Flask app instance.
+    """
     app = Flask(__name__)
     app.config.from_object(Config)
     app.register_blueprint(main)

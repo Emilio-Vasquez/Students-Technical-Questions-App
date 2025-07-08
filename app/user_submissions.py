@@ -1,15 +1,25 @@
+"""
+Handles storing and updating user submissions to coding questions.
+
+Ensures each user has a single up-to-date submission per question, updating the `passed`
+status only if the new submission improves on the previous result.
+"""
 from .db import get_db_connection
 
 def store_user_submission(username, slug, answer, language, passed):
     """
-    Stores or updates a user's submission for a question.
+    Stores or updates a user's submission in the database.
+
+    If the user has already submitted an answer for the same question,
+    their submission is updated. The `passed` field is only upgraded to True,
+    and never downgraded to False.
 
     Args:
-        username (str): the username from session
-        slug (str): question slug
-        answer (str): their submitted code
-        language (str): python or sql
-        passed (bool): whether it passed
+        username (str): The submitting user's username.
+        slug (str): Unique slug identifier for the question.
+        answer (str): The code submitted by the user.
+        language (str): The programming language of the submission ("python" or "sql").
+        passed (bool): Whether the submitted solution passed all test cases.
     """
     conn = get_db_connection()
     with conn.cursor() as cursor:

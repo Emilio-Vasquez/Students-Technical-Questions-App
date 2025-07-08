@@ -1,8 +1,23 @@
+"""
+login.py
+
+Handles user login by validating credentials against the database.
+If the credentials match, the username is stored in the session.
+"""
 from flask import session, flash
 from .db import get_db_connection
 import bcrypt
 
 def handle_login(form):
+    """
+    Validates user credentials submitted through a login form.
+
+    Args:
+        form (ImmutableMultiDict): The form data submitted via POST.
+
+    Returns:
+        tuple: (bool, str) where bool indicates success, and str is a flash message.
+    """
     username = form.get("username", "").strip() ## making sure to strip leading and trailing characters, best way to compare username
     password = form.get("password", "")
 
