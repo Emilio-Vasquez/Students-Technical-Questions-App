@@ -50,3 +50,5 @@ def migrate_questions():
 
 if __name__ == "__main__":
     migrate_questions()
+    
+## To run this migration run this at the root of the project: python -m app.scripts.migrate_questions

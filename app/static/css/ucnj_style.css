@@ -367,6 +367,13 @@ body {
 .output-box {
   margin-bottom: 1rem;
 }
+.output-box pre code {
+    background-color: #ffffff96; /* White background for the code block */
+    display: block;
+    padding: 0.75rem;
+    border-radius: 4px;
+    overflow-x: auto;
+}
 .evaluation-status {
   font-weight: bold;
 }

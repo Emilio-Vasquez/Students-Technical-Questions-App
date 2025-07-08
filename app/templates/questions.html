@@ -55,7 +55,7 @@
                         data-difficulty="{{ q.difficulty }}">
                         <td>{{ q.title }}</td>
                         <td>{{ q.prompt | truncate(150) }}</td>
-                        <td>{{ q.language|capitalize }}</td>
+                        <td>{{ q.language|format_language }}</td> <!-- This format language is a function that says if it's python capatilize the first letter, if it's SQL capatilize the whole word -->
                         <td>
                             <span class="difficulty-badge {{ q.difficulty|lower }}">
                                 {{ q.difficulty }}

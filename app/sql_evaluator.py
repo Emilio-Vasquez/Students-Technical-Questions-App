@@ -1,4 +1,6 @@
 import sqlite3
+import time
+import ast
 
 def evaluate_sql(user_query, expected_output, setup_sql=None):
     """
@@ -31,7 +33,6 @@ def evaluate_sql(user_query, expected_output, setup_sql=None):
         conn = sqlite3.connect(":memory:")
         cursor = conn.cursor()
 
-        # Setup: create and populate tables
         if setup_sql:
             if isinstance(setup_sql, str):
                 cursor.executescript(setup_sql)
@@ -39,25 +40,30 @@ def evaluate_sql(user_query, expected_output, setup_sql=None):
                 for statement in setup_sql:
                     cursor.execute(statement)
 
-        # Run the user's query
+        start_time = time.perf_counter()  # Start timer
         cursor.execute(user_query)
         results = cursor.fetchall()
+        end_time = time.perf_counter()  # End timer
+        elapsed_time = round((end_time - start_time) * 1000, 2)  # changing it into milliseconds
 
-        # Normalize both sides
         actual = normalize(results)
-        expected = normalize(expected_output)
+        try:
+            parsed_expected = ast.literal_eval(expected_output) if isinstance(expected_output, str) else expected_output
+        except Exception as e:
+            return f"❌ Invalid expected_output format: {e}", "(no output)"
+
+        expected = normalize(parsed_expected)
 
         if actual == expected:
             evaluation = "✅ Pass!"
         else:
             evaluation = f"❌ Fail. Expected: {expected} Got: {actual}"
 
-        # Format output for display
         output = "\n".join(str(row) for row in results) if results else "(no rows returned)"
-        MAX_LINES = 20
         lines = output.splitlines()
-        displayed_output = "\n".join(lines[:MAX_LINES]) + ("\n...(truncated)..." if len(lines) > MAX_LINES else "")
+        displayed_output = "\n".join(lines[:20]) + ("\n...(truncated)..." if len(lines) > 20 else "")
 
+        evaluation += f" (⏱ {elapsed_time} ms)"
         return evaluation, displayed_output
 
     except sqlite3.Error as e:
