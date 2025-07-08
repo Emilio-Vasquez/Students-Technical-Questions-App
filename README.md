@@ -2,18 +2,18 @@
 
 ## Overview
 
-The Technical Questions App is a web-based learning platform developed to support students at Union College of Union County, NJ (UCNJ) in preparing for technical interviews and strengthening their coding and data-related skills. It serves as a practice hub for students studying Computer Science, Data Science, and Databases.
+**Technical Questions App** is an interactive coding practice platform built for students at **Union College of Union County, NJ (UCNJ)**. Designed to simulate real-world technical interviews, it helps students sharpen their skills in **Python** and **SQL** through hands-on problem solving.
 
-This platform features an interactive interface where users can register, log in, attempt questions, submit answers, and track their progress. It supports both Python and SQL questions and includes an integrated code evaluator for each. The entire system emphasizes user experience and secure, isolated code execution.
+Students can register, log in, browse categorized questions, write and submit code directly in the browser, and receive instant feedback. The platform features built-in progress tracking and secure sandboxed code evaluation—all wrapped in a responsive, user-friendly interface.
 
 ## Purpose
 
-The main goal of this project is to:
+This project was created to:
 
-- Provide UCNJ students with a self-paced technical interview practice platform.
-- Expose students to real-world coding challenges in Python and SQL.
-- Track student progress over time to help identify areas of improvement.
-- Familiarize students with a modern web-based interface and responsive features.
+- Help UCNJ students practice for coding interviews at their own pace.
+- Build fluency in Python and SQL through real-world challenges.
+- Track individual student progress across categories.
+- Introduce students to a modern, browser-based coding workflow.
 
 ## Project Structure
 
@@ -92,88 +92,88 @@ Technical-Questions-App/
 
 ### 1. User Authentication
 
-- Users can register with a username, email, and password.
-- Login system with password hashing via bcrypt.
-- Session management using Flask sessions.
+Users can create accounts with a username, email, and password.  
+Passwords are securely hashed using bcrypt.  
+Session management is handled through Flask's built-in session system.
 
 ### 2. Question Management
 
-- Questions are stored in a MySQL database and categorized as:
-  - Computer Science
-  - Data Science (a derived aggregate of CS + Databases)
-  - Databases
-- Each question has metadata such as title, slug, category, language, prompt, and expected output.
+Questions are stored in a MySQL database and organized into three categories: Computer Science, Data Science, and Databases.  
+Each question includes a title, slug, category, language, prompt, and a set of test cases for evaluation.
 
 ### 3. Code Evaluation
 
-- **Python Evaluator:** Uses Docker to run user-submitted Python code in a secure sandbox.
-- **SQL Evaluator:** Executes submitted SQL queries against a test database to validate correctness.
+Python code is executed in a secure, sandboxed environment using Docker to prevent unsafe behavior.  
+SQL submissions are executed against an in-memory test database and evaluated based on expected output.
 
-### 4. Language Toggle and Persistence
+### 4. Language Toggle with Persistence
 
-- Users can switch between Python and SQL views per question.
-- Selection persists across page reloads and form submissions.
+Each question supports both Python and SQL implementations.  
+Users can switch between the two languages, and their selection is retained across reloads and submissions.
 
 ### 5. Theme Switching
 
-- Light and dark mode support with persistent theme selection using localStorage.
+The interface supports both light and dark themes.  
+The selected theme is saved using localStorage and applied consistently across sessions.
 
 ### 6. Progress Tracking
 
-- Users can view progress per category.
-- Total questions and completed counts are shown using dynamic progress bars.
+Users can monitor their progress within each category.  
+Both the total number of questions and the number completed are displayed using visual progress indicators.
 
 ### 7. Account Settings
 
-- Allows users to:
-  - Change their password.
-  - Add or update their phone number.
-  - (Future Feature) Verify their email address.
-- Progress is visually represented in a card layout.
+Users can manage their account through the settings page.  
+They can change their password, update their phone number, and verify their email address.  
+Progress data is displayed using a card-based layout for clarity.
 
-### 8. Question Submission & Feedback
+### 8. Question Submission and Feedback
 
-- Users can submit answers and receive instant feedback on correctness.
-- Feedback page available for submitting platform-related comments or suggestions.
+Users can submit solutions to each question and immediately view evaluation results.  
+A dedicated feedback page is available for users to submit comments or suggestions about the platform.
 
 ## Docker Integration
 
-To safely execute potentially untrusted Python code, this project uses Docker to isolate code execution environments. A separate `grader` container runs user code and returns the results back to the main Flask application. This separation ensures system-level security.
+Python code is executed in an isolated Docker container to ensure security.  
+The grader container runs the user’s code separately and returns the result to the main Flask application.  
+This architecture prevents malicious or unstable code from affecting the host system.
 
 ## Database Migration
 
-- Initial question data is migrated from `questions.json` in `app/data/` into a MySQL `questions` table using a migration script located in `app/scripts/migrate_questions.py`.
+Initial question data is defined in a JSON file located at `app/data/questions.json`.  
+This data is imported into the MySQL `questions` table using the migration script `app/scripts/migrate_questions.py`.
 
 ## Testing
 
-Unit tests are stored in the `app/test/` folder and cover:
+Unit tests are located in the `app/test/` directory.  
+They cover the following functionality:
 
-- Python evaluator functionality
-- SQL evaluator functionality
-- MySQL database connectivity
+- Python code evaluation
+- SQL query evaluation
+- Database connection handling
 
 ## Technologies Used
 
-- **Flask** for backend routing and session management
-- **MySQL** for relational data persistence
-- **Docker** for code sandboxing
-- **JavaScript** for client-side interactivity
-- **HTML/CSS (UCNJ styling)** for responsive layout
-- **bcrypt** for password hashing
+- Flask for backend routing, templating, and session control  
+- MySQL for relational data storage  
+- Docker for secure, sandboxed code execution  
+- JavaScript for client-side interactivity  
+- HTML and CSS (UCNJ design theme) for layout and responsiveness  
+- bcrypt for password encryption and verification
 
 ## Running the App
 
-### Prerequisites:
+### Prerequisites
 
-- Python 3.9+
-- Docker
-- MySQL Server
+- Python 3.9 or higher  
+- Docker installed and running  
+- MySQL server with appropriate user credentials
 
-### Setup
+### Setup Instructions
 
 1. Clone the repository:
    ```bash
-   git clone <repo-url>
+   git clone <repository-url>
    cd Technical-Questions-App
    ```
 2. Create a virtual environment and install dependencies:
@@ -186,7 +186,47 @@ Unit tests are stored in the `app/test/` folder and cover:
 4. Run the migration script:
    ```bash
    python -m app.scripts.migrate_questions
+   python -m app.scripts.migrate_test_cases
    ```
+   > Note: The question data must be provided by you. The app expects a file named questions.json located in the app/data/ directory.
+   > You must create this file yourself or acquire it from a source you trust.
+   The file should follow this structure for Python questions:
+   ```json
+   [
+        {
+            "id": 1,
+            "title": "",
+            "slug": "",
+            "prompt": "",
+            "language": "python",
+            "category": "Computer Science",
+            "difficulty": "",
+            "function_signature": "def solution(nums, target):",
+            "test_cases": [
+            {
+                "input": "",
+                "expected_output": "",
+                "description": ""
+            }
+            ]
+        }
+    ]
+   ```
+
+   For SQL questions, replace the `language`, `function_signature`, and ``test_cases` accordingly:
+   ```json
+   {
+        "language": "sql",
+        "test_cases": [
+            {
+            "description": "Find empty neighborhoods",
+            "setup_sql": "CREATE TABLE users (id INT, neighborhood VARCHAR(100)); INSERT INTO users VALUES (1, 'Downtown');",
+            "expected_output": []
+            }
+        ]
+    }
+    ```
+
 5. Start the app:
    ```bash
    python run.py
@@ -194,12 +234,13 @@ Unit tests are stored in the `app/test/` folder and cover:
 
 ## Contribution Guidelines
 
-- Keep code modular and clean.
-- Write docstrings and comments where needed.
-- Use `black` or `flake8` to format Python files.
-- For UI, keep consistency with existing styles in `static/css/ucnj_style.css`.
+- Organize code into clean, modular components.
+- Include meaningful docstrings and inline comments for maintainability.
+- Use tools like `black` or `flake8` to ensure code is consistently formatted.
+- When editing UI elements, follow the design patterns defined in `static/css/ucnj_style.css`.
 
 ## License
 
-This project is internal to UCNJ and not currently open for public distribution.
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).  
+You are free to use, modify, and distribute this software, provided that the original license and copyright notice are included.
 
