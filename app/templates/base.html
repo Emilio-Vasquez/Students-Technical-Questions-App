@@ -62,7 +62,11 @@
     </main>
 
     <footer>
-        &copy; {{ current_year }} Union College of Union County, NJ
+        <p>&copy; {{ current_year }} Union College of Union County, NJ</p>
+        <p class="footer-links">
+            <a href="{{ url_for('main.certifications') }}">Certifications</a> |
+            <a href="{{ url_for('main.feedback') }}">Contact</a>
+        </p>
     </footer>
 
     <!-- I will add a js script to essentially take the flashes out after 4 seconds: -->
