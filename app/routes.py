@@ -244,3 +244,11 @@ def account_settings():
 @main.route('/comment/vote', methods=['POST'])
 def comment_vote():
     return vote_on_comment()
+
+@main.route('/events')
+def events():
+    return render_template('events.html')
+
+@main.route('/certifications')
+def certifications():
+    return render_template('certifications.html')

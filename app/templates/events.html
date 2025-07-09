@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Events - Cyber Center{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/events.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <h2>Upcoming Events</h2>
+    <p>Join us for hands-on experiences and community-building activities hosted by the UCNJ Cyber Center.</p>
+
+    <div class="event-cards">
+
+        <!-- Scavenger Hunt -->
+        <div class="event-card">
+            <img class="event-image" src="{{ url_for('static', filename='images/scavenger-hunt.svg') }}" alt="Cyber Scavenger Hunt">
+            <div class="event-content">
+                <h3>Scavenger Hunt</h3>
+                <p><strong>Date:</strong> September 16, 2025</p>
+                <p><strong>Time:</strong> 2:00 PM EST</p>
+                <p><strong>Location:</strong> Elizabeth Campus Cyber Center (Room K-218)</p>
+                <p><strong>Description:</strong> Compete in a cybersecurity-themed scavenger hunt across virtual and physical clues. Prizes and snacks provided!</p>
+                <p><strong>Audience:</strong> Open to all students. No prior experience required.</p>
+            </div>
+        </div>
+
+        <!-- Visualization Jam -->
+        <div class="event-card">
+            <img class="event-image" src="{{ url_for('static', filename='images/visualization-jam.jpg') }}" alt="Data Visualization Jam">
+            <div class="event-content">
+                <h3>Data Visualization Jam</h3>
+                <p><strong>Date:</strong> October 14, 2025</p>
+                <p><strong>Time:</strong> 2:00 PM EST</p>
+                <p><strong>Location:</strong> Elizabeth Campus Cyber Center (Room K-218)</p>
+                <p><strong>Description:</strong> Bring your laptop and your creativity! Collaborate in teams to create stunning data visuals using open datasets.</p>
+                <p><strong>Audience:</strong> All skill levels welcome. Ideal for Data Science, Computer Science, and Visual Arts students.</p>
+            </div>
+        </div>
+
+        <!-- Linux Intro Activity -->
+        <div class="event-card">
+            <img class="event-image" src="{{ url_for('static', filename='images/linux-intro.jpg') }}" alt="Linux Intro Activity">
+            <div class="event-content">
+                <h3>Linux Intro Activity</h3>
+                <p><strong>Date:</strong> November 11, 2025</p>
+                <p><strong>Time:</strong> 2:00 PM EST</p>
+                <p><strong>Location:</strong> Elizabeth Campus Cyber Center (Room K-218)</p>
+                <p><strong>Description:</strong> New to Linux? Get hands-on with basic commands, the terminal, and how Linux powers cybersecurity tools and servers.</p>
+                <p><strong>Audience:</strong> Perfect for beginners and students exploring cybersecurity or open-source tools.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

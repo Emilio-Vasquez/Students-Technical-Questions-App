@@ -2,14 +2,26 @@
 header {
     background-color: #670b14;
     color: white;
-    padding: 1rem;
+    padding: 0.75rem 1.5rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-between;  /* Key for pushing nav to the right */
+    flex-wrap: wrap; /* allows logo+tagline to stay compact without affecting nav */
 }
-header .logo {
+.header-left {
+    display: flex;
+    flex-direction: column; /* stacks logo and tagline */
+}
+
+.logo {
     font-size: 1.5rem;
     font-weight: bold;
+}
+
+.tagline {
+    font-size: 14px;
+    color: #ccc;
+    margin-top: 2px;
 }
 nav a {
     color: white;

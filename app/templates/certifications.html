@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Certifications - Cyber Center{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/certifications.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <h2>Industry Certifications</h2>
+    <p>
+        The UCNJ Cyber Center proudly supports students pursuing industry-recognized certifications that enhance career readiness in Cybersecurity and Data Science.
+        Below you'll find the current certifications we offer, along with guidance on eligibility and preparation.
+    </p>
+
+    <div class="certification-section">
+        <div class="certification-card">
+            <h3>CompTIA Security+</h3>
+            <p>
+                <strong>Coordinator:</strong> Nahla Al Hamad (<a href="mailto:nahla.alhamad@ucc.edu">nahla.alhamad@ucc.edu</a>)<br>
+                <strong>Track:</strong> Cybersecurity<br>
+                <strong>Eligibility:</strong> Open to students in their second year (sophomore) at UCNJ who are actively pursuing cybersecurity-related studies.<br>
+                <strong>Details:</strong> The CompTIA Security+ certification validates baseline skills necessary to perform core security functions and pursue an IT security career.
+            </p>
+        </div>
+
+        <div class="certification-card">
+            <h3>CompTIA Data+</h3>
+            <p>
+                <strong>Coordinator:</strong> Emilio Vasquez (<a href="mailto:emilio.vasquez@ucc.edu">emilio.vasquez@ucc.edu</a>)<br>
+                <strong>Track:</strong> Data Science<br>
+                <strong>Eligibility:</strong> Open to students majoring in Data Science. Approval is required from Emilio Vasquez prior to registration.<br>
+                <strong>Details:</strong> The CompTIA Data+ certification demonstrates foundational knowledge in data analytics, including data mining, visualization, and governance.
+            </p>
+        </div>
+    </div>
+
+    <p class="footer-note">
+        Not sure where to start? Reach out to Nahla or Emilio for personalized guidance on which certification aligns best with your academic path and career goals.
+    </p>
+</div>
+{% endblock %}

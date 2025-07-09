@@ -1,0 +1,74 @@
+/* events.css */
+.page-container {
+    max-width: 800px;
+    margin: 2rem auto;
+}
+
+.event-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+    align-items: center;
+}
+
+.event-card {
+    display: flex;
+    flex-direction: row;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 900px;
+    width: 100%;
+    text-align: left;
+    height: 310px;
+}
+
+.event-card:hover {
+    transform: scale(1.01);
+}
+
+.event-image {
+    width: 40%;
+    height: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    background-color: #f0f0f0;
+}
+
+.event-content {
+    padding: 1.5rem;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.event-content h3 {
+    margin-top: 0;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.event-content p {
+    margin: 0.4rem 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+/* Responsive stacking on small screens */
+@media (max-width: 768px) {
+    .event-card {
+        flex-direction: column;
+    }
+
+    .event-image {
+        width: 100%;
+        height: 200px;
+    }
+
+    .event-content {
+        width: 100%;
+    }
+}
