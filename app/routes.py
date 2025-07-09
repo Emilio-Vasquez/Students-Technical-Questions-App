@@ -121,6 +121,7 @@ def questions():
 def question_detail(slug): ## The question.title will be obtained when the user clicks the question from the questions.html page
     conn = get_db_connection()
     with conn.cursor() as cursor:
+        ## Fetch the question
         cursor.execute("SELECT * FROM questions WHERE slug = %s", (slug,))
         question = cursor.fetchone()
 
@@ -128,7 +129,7 @@ def question_detail(slug): ## The question.title will be obtained when the user 
             flash("Question is not found", "danger")
             return redirect(url_for('main.questions'))
 
-        # Load associated test cases
+        ## Fetch the test cases
         cursor.execute("""
             SELECT description, input, expected_output, setup_sql
             FROM question_test_cases
@@ -143,6 +144,28 @@ def question_detail(slug): ## The question.title will be obtained when the user 
 
         # Attach test cases to the question dictionary
         question["test_cases"] = test_cases
+
+        # Fetch comments and replies
+        cursor.execute("""
+            SELECT c.id, c.content, c.created_at, c.parent_id, u.username
+            FROM comments c
+            JOIN users u ON c.user_id = u.id
+            WHERE c.question_id = %s
+            ORDER BY c.created_at ASC
+        """, (question["id"],))
+        all_comments = cursor.fetchall()
+
+        top_level_comments = []
+        replies_by_parent = {}
+
+        for comment in all_comments:
+            if comment["parent_id"] is None:
+                top_level_comments.append(comment)
+            else:
+                replies_by_parent.setdefault(comment["parent_id"], []).append(comment)
+
+        for comment in top_level_comments:
+            comment["replies"] = replies_by_parent.get(comment["id"], [])
 
     conn.close()
     
@@ -167,10 +190,21 @@ def question_detail(slug): ## The question.title will be obtained when the user 
         conn.close()
 
     submitted_answer = previous_answer
-    table_metadata = extract_sql_metadata(
-        question["test_cases"][0]["setup_sql"]
-    ) if question["language"] == "sql" and question.get("test_cases") else None
 
+    ## This extracts the table metadata if SQL has the question
+    setup_sql = None
+    if question["language"] == "sql":
+        for case in question.get("test_cases", []):
+            if case.get("setup_sql"):
+                setup_sql = case["setup_sql"]
+                break
+
+    table_metadata = extract_sql_metadata(setup_sql) if setup_sql else None
+    # table_metadata = extract_sql_metadata(
+    #     question["test_cases"][0]["setup_sql"]
+    # ) if question["language"] == "sql" and question.get("test_cases") else None
+
+    ## This part is to handle the code submission
     if request.method == 'POST':
         answer = request.form.get("answer")
         language = request.form.get("language")
@@ -180,7 +214,7 @@ def question_detail(slug): ## The question.title will be obtained when the user 
             return redirect(url_for("main.question_detail", slug=slug))
 
         function_signature = question.get("function_signature") or "def solution():"
-        # ✅ Run evaluation for each test case
+        # Run evaluation for each test case
         evaluation_results = evaluate_submission(
             answer,
             test_cases=question.get("test_cases", []),
@@ -188,7 +222,7 @@ def question_detail(slug): ## The question.title will be obtained when the user 
             function_signature=function_signature
         )
 
-        # ✅ Store the submission and its pass/fail status
+        # Store the submission and its pass/fail status
         if 'username' in session:
             passed_all = all(res["passed"] for res in evaluation_results)
             store_user_submission(
@@ -206,9 +240,10 @@ def question_detail(slug): ## The question.title will be obtained when the user 
         "question_detail.html",
         question=question,
         submitted_answer=submitted_answer or "",
-        evaluation_results=evaluation_results,  # ✅ pass full list
+        evaluation_results=evaluation_results,  ## pass full list
         previous_language=previous_language,
-        table_metadata=table_metadata
+        table_metadata=table_metadata,
+        comments=top_level_comments
     )
 
 @main.route('/logout') ## Flask automatically uses GET method if you don't specify, so when the user clciks the button it redirects

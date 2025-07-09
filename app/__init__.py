@@ -11,6 +11,7 @@ from markdown import markdown
 from .mailer import mail
 from .forgot_password import forgot_password_bp
 from .reset_password import reset_password_bp
+from .question_comments import comment_bp
 
 def create_app():
     """
@@ -29,6 +30,7 @@ def create_app():
     app.register_blueprint(main)
     app.register_blueprint(forgot_password_bp)
     app.register_blueprint(reset_password_bp)
+    app.register_blueprint(comment_bp)
 
     mail.init_app(app)
     
