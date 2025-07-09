@@ -132,18 +132,31 @@
                 </span>
             </p>
             <p>{{ comment.content }}</p>
+            <div class="vote-controls" data-comment-id="{{ comment.id }}">
+                <button class="upvote-btn">
+                    <img src="{{ url_for('static', filename='images/thumbs-up.svg') }}" class="thumb-icon upvote" style="width: 20px; height: 20px;">
+                </button>
+                <span class="vote-score" id="score-{{ comment.id }}">
+                    {{ comment.score }}
+                </span>
+                <button class="downvote-btn">
+                    <img src="{{ url_for('static', filename='images/thumbs-up.svg') }}" class="thumb-icon downvote" style="width: 20px; height: 20px;">
+                </button>
+            </div>
 
-            <button 
-                class="toggle-replies-btn" 
-                data-comment-id="{{ comment.id }}" 
-                data-total-replies="{{ comment.reply_count }}" 
-                data-original-text="Reply">
-                {% if comment.reply_count > 0 %}
-                    View Repl{{ 'y' if comment.reply_count == 1 else 'ies' }} ({{ comment.reply_count }})
-                {% else %}
-                    Reply
-                {% endif %}
-            </button>
+            <div class="reply-controls">
+                <button 
+                    class="toggle-replies-btn" 
+                    data-comment-id="{{ comment.id }}" 
+                    data-total-replies="{{ comment.reply_count }}" 
+                    data-original-text="Reply">
+                    {% if comment.reply_count > 0 %}
+                        View Repl{{ 'y' if comment.reply_count == 1 else 'ies' }} ({{ comment.reply_count }})
+                    {% else %}
+                        Reply
+                    {% endif %}
+                </button>
+            </div>
 
             <div class="replies" id="replies-{{ comment.id }}" style="display: none; margin-top: 1rem;">
                 {% for reply in comment.replies %}
@@ -185,7 +198,7 @@
                 <button type="submit">Post Comment</button>
             </form>
         {% endif %}
-        
+
         <hr style="margin: 2rem 0;">
 
         {% for comment in comments %}
@@ -198,5 +211,6 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/code_editor.js') }}"></script>
-<script src="{{ url_for('static', filename='js/question_comments.js') }}"></script>
+<script src="{{ url_for('static', filename='js/comments.js') }}"></script>
+<script src="{{ url_for('static', filename='js/comment_voting.js') }}"></script>
 {% endblock %}

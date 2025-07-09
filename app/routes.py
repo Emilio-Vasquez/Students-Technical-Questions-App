@@ -32,7 +32,7 @@ from .user_submissions import store_user_submission ## store_user_submission fun
 from .db import get_db_connection ## getting the database connection
 from .sql_table_metadata import extract_sql_metadata ## This gets the sql metadata to give to the user for a nice table display on their questions
 import json
-from app.comments import build_comment_tree, get_all_comments ## This is the recursive application tree for comments
+from .comments import build_comment_tree, get_all_comments, vote_on_comment, get_comments_with_scores ## This is the recursive application tree for comments, and for the upvoting and downvoting and to get the scores of upvotes/downvotes on comments
 
 main = Blueprint('main', __name__)
 
@@ -146,9 +146,18 @@ def question_detail(slug): ## The question.title will be obtained when the user 
 
     conn.close()
 
-    # ✅ Get nested comments for this question
+    # Get nested comments for this question
     all_comments = get_all_comments(question["id"])
     nested_comments = build_comment_tree(all_comments)
+
+    # Inject score data
+    comment_scores = get_comments_with_scores(question["id"])
+    def inject_scores(comments):
+        for comment in comments:
+            comment["score"] = max(comment_scores.get(comment["id"], 0), 0)
+            if "replies" in comment:
+                inject_scores(comment["replies"])
+    inject_scores(nested_comments)
 
     # Check for previous submission
     previous_answer = None
@@ -231,3 +240,7 @@ def logout():
 @main.route('/account_settings', methods=['GET','POST']) ## Flask automatically uses GET method if you don't specify, so when the user clciks the button it redirects
 def account_settings():
     return handle_account_settings()
+
+@main.route('/comment/vote', methods=['POST'])
+def comment_vote():
+    return vote_on_comment()

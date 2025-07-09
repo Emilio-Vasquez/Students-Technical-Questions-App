@@ -1,7 +1,6 @@
-from flask import Blueprint, request, redirect, url_for, flash, session
+from flask import Blueprint, request, redirect, url_for, flash, jsonify, session
 from .db import get_db_connection
 from collections import defaultdict
-
 
 comment_bp = Blueprint("comment", __name__)
 
@@ -70,3 +69,57 @@ def post_comment(question_id):
     conn.close()
 
     return redirect(url_for("main.question_detail", slug=slug))
+
+def vote_on_comment():
+    if 'username' not in session:
+        return jsonify({'error': 'Not authenticated'}), 401
+
+    data = request.get_json()
+    comment_id = data.get('comment_id')
+    vote_value = data.get('vote')  # +1 or -1
+
+    if vote_value not in [-1, 1]:
+        return jsonify({'error': 'Invalid vote'}), 400
+
+    # Look up user_id using username
+    conn = get_db_connection()
+    with conn.cursor() as cursor:
+        cursor.execute("SELECT id FROM users WHERE username = %s", (session['username'],))
+        user_row = cursor.fetchone()
+
+        if not user_row:
+            return jsonify({'error': 'User not found'}), 404
+
+        user_id = user_row['id']
+
+        # Upsert vote
+        cursor.execute("""
+            INSERT INTO comment_votes (user_id, comment_id, vote)
+            VALUES (%s, %s, %s)
+            ON DUPLICATE KEY UPDATE vote = VALUES(vote)
+        """, (user_id, comment_id, vote_value))
+        conn.commit()
+
+        # Recalculate total score
+        cursor.execute("""
+            SELECT SUM(vote) as score FROM comment_votes WHERE comment_id = %s
+        """, (comment_id,))
+        result = cursor.fetchone()
+        score = result['score'] if result['score'] is not None else 0
+
+    return jsonify({'score': max(score, 0), 'true_score': score})
+
+# Example: assuming you're loading comments for a question
+def get_comments_with_scores(question_id):
+    conn = get_db_connection()
+    with conn.cursor() as cursor:
+        cursor.execute("""
+            SELECT c.id, COALESCE(SUM(v.vote), 0) AS score
+            FROM comments c
+            LEFT JOIN comment_votes v ON c.id = v.comment_id
+            WHERE c.question_id = %s
+            GROUP BY c.id
+        """, (question_id,))
+        rows = cursor.fetchall()
+    conn.close()
+    return {row["id"]: row["score"] for row in rows}

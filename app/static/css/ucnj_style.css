@@ -867,3 +867,63 @@ body {
 .toggle-replies-btn:hover {
   background-color: #d0d0d0;
 }
+
+/* Voting controls - updated: */
+.vote-controls {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.vote-controls button {
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vote-controls button:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.vote-controls img.thumb-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+/* Base rotation for downvote icon */
+.vote-controls img.downvote {
+  transform: rotate(180deg);
+}
+
+/* Maintain rotation + scale on hover */
+.vote-controls button:hover img.thumb-icon.upvote {
+  transform: scale(1.05);
+}
+
+.vote-controls button:hover img.thumb-icon.downvote {
+  transform: rotate(180deg) scale(1.05);
+}
+
+.vote-score {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0 0.25rem;
+  color: #333;
+}
+
+.thumb-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.downvote {
+  transform: rotate(180deg);
+}

@@ -108,3 +108,15 @@ CREATE TABLE comment_replies (
     FOREIGN KEY (comment_id) REFERENCES comments(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+-- This creates storage for upvoting and downvvoting comments:
+CREATE TABLE comment_votes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    comment_id INT NOT NULL,
+    vote INT NOT NULL CHECK (vote IN (-1, 1)),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (user_id, comment_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (comment_id) REFERENCES comments(id) ON DELETE CASCADE
+);
