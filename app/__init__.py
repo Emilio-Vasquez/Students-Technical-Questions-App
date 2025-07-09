@@ -11,7 +11,7 @@ from markdown import markdown
 from .mailer import mail
 from .forgot_password import forgot_password_bp
 from .reset_password import reset_password_bp
-from .question_comments import comment_bp
+from .comments import comment_bp
 
 def create_app():
     """

@@ -123,65 +123,53 @@
         <a href="{{ url_for('main.questions') }}" class="back-button">← Back to Questions</a>
     </p>
     
+    {% macro render_comment(comment, depth=0) %}
+        <div class="comment" style="margin-left: {{ depth * 2 }}rem; margin-bottom: 1.5rem;">
+            <p>
+                <strong>{{ comment.username or "Anonymous" }}</strong>
+                <span style="color: gray; font-size: 0.9em;">
+                    — {{ comment.created_at.strftime("%B %d, %Y at %I:%M %p") }}
+                </span>
+            </p>
+            <p>{{ comment.content }}</p>
+
+            <button 
+                class="toggle-replies-btn" 
+                data-comment-id="{{ comment.id }}" 
+                data-total-replies="{{ comment.reply_count }}" 
+                data-original-text="Reply">
+                {% if comment.reply_count > 0 %}
+                    View Repl{{ 'y' if comment.reply_count == 1 else 'ies' }} ({{ comment.reply_count }})
+                {% else %}
+                    Reply
+                {% endif %}
+            </button>
+
+            <div class="replies" id="replies-{{ comment.id }}" style="display: none; margin-top: 1rem;">
+                {% for reply in comment.replies %}
+                    {{ render_comment(reply, depth + 1) }}
+                {% endfor %}
+
+                {% if 'username' in session %}
+                    <form method="post" action="{{ url_for('comment.post_comment', question_id=question.id) }}" class="reply-form" style="margin-top: 0.5rem;">
+                        <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                        <input type="hidden" name="slug" value="{{ question.slug }}">
+                        <textarea name="content" rows="2" placeholder="Write a reply..." required></textarea>
+                        <button type="submit">Reply</button>
+                    </form>
+                {% else %}
+                    <form onsubmit="handleNotLoggedIn(event)" class="reply-form" style="margin-top: 0.5rem;">
+                        <textarea rows="2" placeholder="Log in to reply." disabled></textarea>
+                        <button type="submit">Reply</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    {% endmacro %}
+
     <hr>
     <div class="comments-section" style="margin-top: 2rem;">
         <h3>Discussion</h3>
-
-        {% for comment in comments %}
-            {% if not comment.parent_id %}
-                <div class="comment" style="margin-bottom: 1.5rem;">
-                    <!-- Top-Level Comment -->
-                    <p>
-                        <strong>{{ comment.username or "Anonymous" }}</strong>
-                        <span style="color: gray; font-size: 0.9em;">
-                            — {{ comment.created_at.strftime("%B %d, %Y at %I:%M %p") }}
-                        </span>
-                    </p>
-                    <p>{{ comment.content }}</p>
-
-                    {% set reply_count = comment.replies | length %}
-                    <!-- Toggle Replies Button -->
-                    <button class="toggle-replies-btn" data-comment-id="{{ comment.id }}">
-                        {% if reply_count > 0 %}
-                            View Replies ({{ reply_count }})
-                        {% else %}
-                            Reply
-                        {% endif %}
-                    </button>
-
-                    <!-- Replies Container -->
-                    <div class="replies" id="replies-{{ comment.id }}" style="margin-left: 2rem; display: none;">
-                        {% for reply in comment.replies %}
-                            <div class="reply" style="margin-bottom: 1rem;">
-                                <p>
-                                    <strong>{{ reply.username or "Anonymous" }}</strong>
-                                    <span style="color: gray; font-size: 0.85em;">
-                                        — {{ reply.created_at.strftime("%B %d, %Y at %I:%M %p") }}
-                                    </span>
-                                </p>
-                                <p>{{ reply.content }}</p>
-                            </div>
-                        {% endfor %}
-
-                        <!-- Reply Form -->
-                        {% if 'username' in session %}
-                            <form method="post" action="{{ url_for('comment.post_comment', question_id=question.id) }}" class="reply-form" style="margin-top: 0.5rem;">
-                                <input type="hidden" name="parent_id" value="{{ comment.id }}">
-                                <input type="hidden" name="slug" value="{{ question.slug }}">
-                                <textarea name="content" rows="2" placeholder="Write a reply..." required></textarea>
-                                <button type="submit">Reply</button>
-                            </form>
-                        {% else %}
-                            <form onsubmit="handleNotLoggedIn(event)" class="reply-form" style="margin-top: 0.5rem;">
-                                <textarea rows="2" placeholder="Log in to reply." disabled></textarea>
-                                <button type="submit">Reply</button>
-                            </form>
-                        {% endif %}
-                    </div>
-                </div>
-                <hr>
-            {% endif %}
-        {% endfor %}
 
         <!-- New Top-Level Comment Form -->
         <h4 style="margin-top: 2rem;">Add a Comment</h4>
@@ -197,6 +185,15 @@
                 <button type="submit">Post Comment</button>
             </form>
         {% endif %}
+        
+        <hr style="margin: 2rem 0;">
+
+        {% for comment in comments %}
+            {% if not comment.parent_id %}
+                {{ render_comment(comment) }}
+                <hr>
+            {% endif %}
+        {% endfor %}
     </div>
 </div>
 

@@ -10,17 +10,20 @@ document.addEventListener('DOMContentLoaded', () => {
     button.addEventListener('click', () => {
       const commentId = button.getAttribute('data-comment-id');
       const repliesDiv = document.getElementById(`replies-${commentId}`);
+      const totalReplies = parseInt(button.getAttribute('data-total-replies'), 10);
 
-      if (repliesDiv.style.display === 'none') {
-        repliesDiv.style.display = 'block';
+      const isHidden = repliesDiv.style.display === 'none';
+
+      repliesDiv.style.display = isHidden ? 'block' : 'none';
+
+      if (isHidden) {
         button.textContent = 'Hide Replies';
       } else {
-        repliesDiv.style.display = 'none';
-        const originalText = button.getAttribute('data-original-text');
-        if (originalText) {
-          button.textContent = originalText;
+        if (totalReplies > 0) {
+          const label = totalReplies === 1 ? 'Reply' : 'Replies';
+          button.textContent = `View ${label} (${totalReplies})`;
         } else {
-          button.textContent = 'View Replies';
+          button.textContent = 'Reply';
         }
       }
     });
