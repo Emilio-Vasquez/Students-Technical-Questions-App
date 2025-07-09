@@ -115,6 +115,7 @@ Users can switch between the two languages, and their selection is retained acro
 
 The interface supports both light and dark themes.  
 The selected theme is saved using localStorage and applied consistently across sessions.
+However, this light/dark theme is not applied to the whole page, only the textarea for coding.
 
 ### 6. Progress Tracking
 
@@ -142,6 +143,8 @@ This architecture prevents malicious or unstable code from affecting the host sy
 
 Initial question data is defined in a JSON file located at `app/data/questions.json`.  
 This data is imported into the MySQL `questions` table using the migration script `app/scripts/migrate_questions.py`.
+The data for the test cases are also within the keys of the `questions.json` file, but the table filled is
+`question_test_cases`, and the migration script is `app/scripts/migrate_test_cases.py`.
 
 ## Testing
 
