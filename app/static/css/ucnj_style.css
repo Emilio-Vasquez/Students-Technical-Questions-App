@@ -64,7 +64,7 @@ html, body {
 }
 
 body {
-    background-color: #F4EBD0; /*Use this color: #FBE8C4, other colors: #3b0d0d31 and #F4EBD0*/
+    background-color: #FBE8C4; /*Use this color: #FBE8C4 , other colors: #3b0d0d31 and #F4EBD0*/
     display: flex;
     flex-direction: column;
 }
