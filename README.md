@@ -49,7 +49,7 @@ Technical-Questions-App/
 │   │   │   └── ucnj_style.css
 │   │   ├── images/
 │   │   │   ├── emilio.PNG
-│   │   │   └── favicon.ico
+│   │   │   └── logo.ico
 │   │   ├── js/
 │   │   │   ├── account_settings.js
 │   │   │   ├── code_editor.js
