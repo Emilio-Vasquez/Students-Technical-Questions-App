@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Cyber and Data Portal{% endblock %}</title>
+    <title>{% block title %}EAV Data Science Portal{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/logo.ico') }}"> <!-- This is my logo's favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}"> <!-- This is my logo's favicon -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/ucnj_style.css')}}">
     <!-- This is for page-specific CSS -->
     {% block extra_css %}{% endblock %}
@@ -18,8 +18,8 @@
 <body>
     <header>
         <div class="header-left">
-            <div class="logo">Cyber and Data Portal</div>
-            <p class="tagline">Hands-on Cybersecurity & Data Science Learning Hub</p>
+            <div class="logo">EAV Data Science Portal</div>
+            <p class="tagline">Hands-on Data Science & Cybersecurity Learning Hub</p>
         </div>
         <nav>
             <a href="{{ url_for('main.home') }}">Home</a>
@@ -62,7 +62,7 @@
     </main>
 
     <footer>
-        <p>&copy; {{ current_year }} Union College of Union County, NJ</p>
+        <p>&copy; {{ current_year }} Emilio Vasquez. All rights reserved.</p>
         <p class="footer-links">
             <a href="{{ url_for('main.certifications') }}">Certifications</a> |
             <a href="{{ url_for('main.feedback') }}">Contact</a>
