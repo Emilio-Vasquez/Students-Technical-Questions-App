@@ -3,17 +3,32 @@
 {% block title %}Feedback - Technical Questions App{% endblock %}
 
 {% block content %}
+{% set logged_in = session.get('username') %}
 <div class="feedback-container">
     <h2>We value your feedback</h2>
     <form method="post" action="{{ url_for('main.feedback') }}">
-        <div>
-            <label for="name">Your Name:</label><br>
-            <input type="text" name="name" id="name" required>
-        </div>
-        <div>
-            <label for="email">Your Email:</label><br>
-            <input type="email" name="email" id="email" required>
-        </div>
+
+        {% if logged_in %}
+            <div>
+                <label>Your Name:</label><br>
+                <input type="text" value="{{ session.username }}" disabled>
+            </div>
+            <div>
+                <label>Your Email:</label><br>
+                <input type="email" value="{{ session['email'][:3] + '***' + session['email'].split('@')[1] }}" disabled>
+                <input type="hidden" name="email" value="{{ session.email }}">
+            </div>
+        {% else %}
+            <div>
+                <label for="name">Your Name:</label><br>
+                <input type="text" name="name" id="name" required>
+            </div>
+            <div>
+                <label for="email">Your Email:</label><br>
+                <input type="email" name="email" id="email" required>
+            </div>
+        {% endif %}
+
         <div>
             <label for="category">Category:</label><br>
             <select name="category" id="category">
@@ -22,10 +37,12 @@
                 <option value="suggestion">Suggestion</option>
             </select>
         </div>
+
         <div>
             <label for="feedback_text">Your Feedback:</label><br>
             <textarea name="feedback_text" id="feedback_text" rows="8" required placeholder="Type your feedback here..."></textarea>
         </div>
+
         <div>
             <button type="submit">Submit Feedback</button>
         </div>

@@ -38,7 +38,7 @@ def handle_feedback(form, session):
             row = cursor.fetchone()
         conn.close()
         if row:
-            user_id = row[0]
+            user_id = row['id']
 
     conn = get_db_connection()
     with conn.cursor() as cursor:

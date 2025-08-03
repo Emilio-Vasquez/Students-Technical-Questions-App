@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Feedback Inbox - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-container" style="max-width: 1000px; margin: 0 auto; padding: 2rem;">
+    <h2 style="text-align: center; margin-bottom: 2rem;">User Feedback Inbox</h2>
+
+    <div class="table-wrapper" style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+            <thead>
+                <tr style="background-color: #f4f4f4; border-bottom: 2px solid #ddd;">
+                    <th style="padding: 0.75rem;">ID</th>
+                    <th style="padding: 0.75rem;">User</th>
+                    <th style="padding: 0.75rem;">Message</th>
+                    <th style="padding: 0.75rem;">Submitted At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fb in feedback_list %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 0.75rem;">{{ fb.id }}</td>
+                    <td style="padding: 0.75rem;">{{ fb.username }}</td>
+                    <td style="padding: 0.75rem;">{{ fb.message }}</td>
+                    <td style="padding: 0.75rem;">{{ fb.submitted_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="padding: 1rem; text-align: center; color: #888;">No feedback entries yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

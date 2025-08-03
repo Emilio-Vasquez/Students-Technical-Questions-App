@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS feedback (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NULL,
+    name VARCHAR(255);
     email VARCHAR(255),
     category VARCHAR(100) DEFAULT 'general',
     feedback_text TEXT NOT NULL,
