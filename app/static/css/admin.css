@@ -90,3 +90,17 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+.stat-card {
+    background-color: #fafafa;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    width: 30%;
+}
+
+.stat-card h4 {
+    margin-bottom: 0.5rem;
+}
+

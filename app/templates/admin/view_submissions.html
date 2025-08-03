@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}View Submissions - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-container" style="max-width: 1100px; margin: 0 auto; padding: 2rem;">
+    <h2 style="text-align: center; margin-bottom: 2rem;">All User Submissions</h2>
+
+    <form method="get" style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+        <label>
+            Username:
+            <input type="text" name="username" value="{{ username_filter or '' }}" style="padding: 0.5rem; margin-left: 0.5rem;">
+        </label>
+        <label>
+            Question Title:
+            <input type="text" name="question" value="{{ question_filter or '' }}" style="padding: 0.5rem; margin-left: 0.5rem;">
+        </label>
+        <button type="submit" style="padding: 0.5rem 1rem; background-color: #4285f4; color: white; border: none; border-radius: 4px;">Apply Filters</button>
+        <a href="{{ url_for('admin.view_submissions') }}" style="margin-left: 1rem; color: #555;">Reset</a>
+    </form>
+
+    <!-- Submission Stats -->
+    <div class="submission-stats" style="display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 2rem;">
+        <div class="stat-card" style="flex: 1; background: #fff; border: 1px solid #ddd; padding: 1.5rem; text-align: center; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+            <h4>Total Submissions</h4>
+            <p style="font-size: 1.5rem; font-weight: bold;">{{ stats.total_submissions }}</p>
+        </div>
+        <div class="stat-card" style="flex: 1; background: #fff; border: 1px solid #ddd; padding: 1.5rem; text-align: center; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+            <h4 style="color: green;">Passed</h4>
+            <p style="font-size: 1.5rem; font-weight: bold;">{{ stats.total_passed }}</p>
+        </div>
+        <div class="stat-card" style="flex: 1; background: #fff; border: 1px solid #ddd; padding: 1.5rem; text-align: center; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+            <h4 style="color: red;">Failed</h4>
+            <p style="font-size: 1.5rem; font-weight: bold;">{{ stats.total_failed }}</p>
+        </div>
+    </div>
+
+    <!-- Submissions Table -->
+    <div class="table-wrapper" style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+            <thead>
+                <tr style="background-color: #f4f4f4; border-bottom: 2px solid #ddd;">
+                    <th style="padding: 0.75rem; text-align: left;">ID</th>
+                    <th style="padding: 0.75rem; text-align: left;">User</th>
+                    <th style="padding: 0.75rem; text-align: left;">Question</th>
+                    <th style="padding: 0.75rem; text-align: left;">Passed</th>
+                    <th style="padding: 0.75rem; text-align: left;">
+                        <a href="{{ url_for('admin.view_submissions', username=username_filter, question=question_filter, sort=('asc' if sort_order == 'desc' else 'desc')) }}" style="text-decoration: none; color: inherit;">
+                            Submitted At
+                            {% if sort_order == 'desc' %}
+                                &#8595;
+                            {% else %}
+                                &#8593;
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th style="padding: 0.75rem; text-align: left;">Code (truncated)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub in submissions %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 0.75rem;">{{ sub.id }}</td>
+                    <td style="padding: 0.75rem;">{{ sub.username }}</td>
+                    <td style="padding: 0.75rem;">{{ sub.question_title }}</td>
+                    <td style="padding: 0.75rem; color: {{ 'green' if sub.passed else 'red' }};">
+                        {{ '✔' if sub.passed else '✘' }}
+                    </td>
+                    <td style="padding: 0.75rem;">{{ sub.submitted_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td style="padding: 0.75rem;">
+                        <pre style="max-width: 400px; white-space: pre-wrap; margin: 0;">{{ sub.code[:100] }}{% if sub.code|length > 100 %}...{% endif %}</pre>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
