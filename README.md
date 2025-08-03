@@ -22,6 +22,7 @@ Technical-Questions-App/
 ├── app/
 │   ├── __init__.py
 │   ├── account_settings.py
+│   ├── comments.py
 │   ├── db.py
 │   ├── feedback.py
 │   ├── forgot_password.py
@@ -37,7 +38,19 @@ Technical-Questions-App/
 │   ├── sql_table_metadata.py
 │   ├── user_submissions.py
 │   ├── user_validators.py
+│   ├── admin/
+│   │   ├── __init__.py
+│   │   ├── dashboard.py
+│   │   ├── feedback.py
+│   │   ├── questions.py
+│   │   ├── routes.py
+│   │   ├── submissions.py
+│   │   ├── test_cases.py
+│   │   ├── tools.py
+│   │   ├── users.py
+│   │   └── utils.py
 │   ├── data/
+│   │   ├── answer_key.json
 │   │   └── questions.json
 │   ├── grader/
 │   │   └── Dockerfile
@@ -46,22 +59,42 @@ Technical-Questions-App/
 │   │   └── migrate_test_cases.py
 │   ├── static/
 │   │   ├── css/
+│   │   │   ├── admin.css
+│   │   │   ├── certifications.css
+│   │   │   ├── events.css
 │   │   │   └── ucnj_style.css
 │   │   ├── images/
 │   │   │   ├── emilio.PNG
+│   │   │   ├── linux-intro.jpg
+│   │   │   ├── scavenger-hunt.svg
+│   │   │   ├── thumbs-up.svg
+│   │   │   ├── visualization-jam.jpg
 │   │   │   └── favicon.ico
 │   │   ├── js/
 │   │   │   ├── account_settings.js
+│   │   │   ├── add_question.js
 │   │   │   ├── code_editor.js
+│   │   │   ├── comment_voting.js
+│   │   │   ├── comments.js
 │   │   │   ├── flash.js
+│   │   │   ├── handle_not_logged.js
 │   │   │   ├── login.js
 │   │   │   ├── question_filter.js
 │   │   │   ├── question_sort.js
 │   │   │   ├── register.js
-│   │   │   └── reset_password.js
+│   │   │   ├── reset_password.js
+│   │   │   └── test_cases.js
 │   ├── templates/
+│   │   ├── admin/
+│   │   │   ├── add_question.html
+│   │   │   ├── dashboard.html
+│   │   │   ├── edit_question_list.html
+│   │   │   ├── edit_question.html
+│   │   │   └── manage_test_cases.html
 │   │   ├── account_settings.html
 │   │   ├── base.html
+│   │   ├── certifications.html
+│   │   ├── events.html
 │   │   ├── feedback.html
 │   │   ├── forgot_password.html
 │   │   ├── home.html
@@ -81,7 +114,6 @@ Technical-Questions-App/
 ├── .env
 ├── .gitignore
 ├── config.py
-├── database_queries.sql
 ├── LICENSE
 ├── README.md
 ├── run.py
