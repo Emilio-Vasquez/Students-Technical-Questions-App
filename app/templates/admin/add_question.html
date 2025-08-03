@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Add Question{% endblock %}
+
+{% block content %}
+<div class="admin-question-container">
+    <h2>Add New Question</h2>
+    <form method="POST" action="{{ url_for('admin.add_question') }}">
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" required>
+        </div>
+
+        <div class="form-group">
+            <label for="prompt">Prompt (Markdown supported):</label>
+            <textarea name="prompt" id="prompt" rows="8" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="language">Language:</label>
+            <select name="language" id="language" required>
+                <option value="python">Python</option>
+                <option value="sql">SQL</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <select name="category" id="category" required>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Databases">Databases</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="difficulty">Difficulty:</label>
+            <select name="difficulty" id="difficulty" required>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="function_signature_group">
+            <label>Function Signature (Python only):</label>
+            <input type="text" name="function_signature" id="function_signature" placeholder="e.g. def solution(nums, target):">
+        </div>
+
+        <div class="form-group">
+            <label>Test Cases:</label>
+            <p style="font-size: 0.9em; color: #555;">Test cases will be added via another interface after initial question creation.</p>
+        </div>
+
+        <button type="submit">Add Question</button>
+    </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/add_question.js') }}"></script>
+{% endblock %}

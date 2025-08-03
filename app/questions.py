@@ -12,21 +12,37 @@ import json
 import os
 from .sql_evaluator import evaluate_sql
 from .python_evaluator import evaluate_python
+from app.db import get_db_connection
 
-def load_questions():
+def load_questions(source='db'):
     """
-    Load all technical questions from the 'questions.json' file in the data directory.
+    Load all technical questions from either the SQL database or questions.json file.
+
+    Args:
+        source (str): 'db' to load from MySQL database (default), 'json' to load from local JSON file.
 
     Returns:
-        list: A list of question dictionaries parsed from the JSON file.
+        list: A list of question dictionaries.
     """
-    file_path = os.path.join(os.path.dirname(__file__), 'data', 'questions.json') ## this will join the folder's name: 'app/' and connect it with 'data' and 'questions.json
+    #file_path = os.path.join(os.path.dirname(__file__), 'data', 'questions.json') ## this will join the folder's name: 'app/' and connect it with 'data' and 'questions.json
     ## that's app/data/questions.json and that's where the questions are stored in a json file.
     ## in this json file, you will see: "slug", we use "slugs" because they're route friendly, not having uppercase or spaces.
     ## There are no comments allowed in json so we had to remove all comments
     ## JSON also uses double quotes for all keys and strings
-    with open('app/data/questions.json', encoding='utf-8') as f:
-        return json.load(f) ## this is to open and read the files
+    if source == 'json':
+        with open('app/data/questions.json', encoding='utf-8') as f:
+            return json.load(f)
+    else:
+        conn = get_db_connection()
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                SELECT id, title, prompt, slug, difficulty, category, language, function_signature
+                FROM questions
+                ORDER BY id ASC
+            """)
+            questions = cursor.fetchall()
+        conn.close()
+        return questions
 
 def evaluate_submission(user_code, test_cases, language="python", function_signature=None):
     """

@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     phone VARCHAR(20),
     is_verified BOOLEAN DEFAULT FALSE,
+    role VARCHAR(20) DEFAULT 'user',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -49,7 +50,8 @@ CREATE TABLE IF NOT EXISTS questions (
     category VARCHAR(100),
     language VARCHAR(20),
     setup_sql TEXT,
-    function_signature VARCHAR(255)
+    function_signature VARCHAR(255),
+    difficulty VARCHAR(20) NOT NULL DEFAULT 'Easy'
 );
 
 -- Step 6: Test Cases table

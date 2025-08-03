@@ -30,8 +30,8 @@ def migrate_questions():
 
             # Insert new question
             cursor.execute("""
-                INSERT INTO questions (title, slug, prompt, category, language, setup_sql, function_signature)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO questions (title, slug, prompt, category, language, setup_sql, function_signature, difficulty)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 q['title'],
                 q['slug'],
@@ -39,7 +39,8 @@ def migrate_questions():
                 q.get('category'),
                 q.get('language'),
                 setup_sql,
-                q.get('function_signature')  # May be None for SQL
+                q.get('function_signature'),
+                q.get('difficulty', 'Easy')  # Default fallback
             ))
 
         conn.commit()

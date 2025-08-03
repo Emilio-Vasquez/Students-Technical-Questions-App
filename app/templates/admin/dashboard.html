@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard-container">
+    <h1>Admin Dashboard</h1>
+
+    <div class="admin-section">
+        <h2>Question Management</h2>
+        <ul>
+            <li><a href="{{ url_for('admin.add_question') }}">➕ Add New Question</a></li>
+            <li><a href="{{ url_for('admin.edit_question_list') }}">📝 Edit/Delete Questions</a></li>
+        </ul>
+    </div>
+
+    <div class="admin-section">
+        <h2>User Submissions</h2>
+        <ul>
+            <li><a href="{{ url_for('admin.view_submissions') }}">📄 View All Submissions</a></li>
+            <li><a href="{{ url_for('admin.submission_stats') }}">📊 Submission Analytics</a></li>
+        </ul>
+    </div>
+
+    {% if session.get('role') == 'superadmin' %}
+    <div class="admin-section">
+        <h2>User Management</h2>
+        <ul>
+            <li><a href="{{ url_for('admin.user_list') }}">👥 View Users</a></li>
+            <li><a href="{{ url_for('admin.promote_user') }}">🛡️ Promote/Demote Admins</a></li>
+            <li><a href="{{ url_for('admin.verify_user') }}">✅ Verify/Unverify Users</a></li>
+            <li><a href="{{ url_for('admin.delete_users') }}">🗑️ Delete Users (Bulk)</a></li>
+        </ul>
+    </div>
+
+    <div class="admin-section">
+        <h2>System Tools</h2>
+        <ul>
+            <li><a href="{{ url_for('admin.reset_submissions') }}">🧼 Reset All Submissions</a></li>
+            <li><a href="{{ url_for('admin.export_data') }}">⬇️ Export Submissions (CSV)</a></li>
+        </ul>
+    </div>
+    {% endif %}
+
+    <div class="admin-section">
+        <h2>Feedback</h2>
+        <ul>
+            <li><a href="{{ url_for('admin.feedback_inbox') }}">📥 View Feedback</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

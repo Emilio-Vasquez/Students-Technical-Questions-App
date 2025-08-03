@@ -31,7 +31,7 @@ def get_all_comments(question_id):
     conn = get_db_connection()
     with conn.cursor() as cursor:
         cursor.execute("""
-            SELECT c.id, c.content, c.created_at, c.parent_id, u.username
+            SELECT c.id, c.content, c.created_at, c.parent_id, u.username, u.role
             FROM comments c
             LEFT JOIN users u ON c.user_id = u.id
             WHERE c.question_id = %s

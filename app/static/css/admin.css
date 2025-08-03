@@ -1,0 +1,92 @@
+/* admin.css or ucnj_style.css */
+
+.test-case-container {
+    max-width: 960px;
+    margin: auto;
+    padding: 2rem;
+    font-family: 'Segoe UI', sans-serif;
+    color: #333;
+}
+
+.test-case-form {
+    background-color: #fdfdfd;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.test-case-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.test-case-form textarea,
+.test-case-form input,
+.test-case-form select {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.test-case-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.test-case-form button.btn {
+    padding: 0.6rem 1.2rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.test-case-form button.btn:hover {
+    background-color: #45a049;
+}
+
+.test-case-list {
+    margin-top: 1rem;
+}
+
+.test-case-card {
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.test-case-card code {
+    background-color: #f1f1f1;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 0.95em;
+}
+
+.test-case-card pre {
+    background-color: #f5f5f5;
+    padding: 0.75rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 0.95em;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

@@ -234,6 +234,7 @@ def question_detail(slug): ## The question.title will be obtained when the user 
 @main.route('/logout') ## Flask automatically uses GET method if you don't specify, so when the user clciks the button it redirects
 def logout():
     session.pop('username', None)
+    session.pop('role', None)
     flash("You have been logged out!", "info")
     return redirect(url_for('main.home'))
 

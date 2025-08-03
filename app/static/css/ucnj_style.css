@@ -939,3 +939,166 @@ body {
 .downvote {
   transform: rotate(180deg);
 }
+
+/* visual badges for admins/moderators */
+.badge {
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    color: white;
+}
+
+.badge-superadmin {
+    background-color: #d9534f; /* red */
+    font-weight: bold;
+}
+
+.badge-moderator {
+    background-color: #5bc0de; /* blue */
+    font-weight: bold;
+}
+
+.admin-dashboard-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-dashboard-container h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.admin-section {
+    background-color: #f9f9f9;
+    border-left: 5px solid #007BFF;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 6px;
+}
+
+.admin-section h2 {
+    margin-top: 0;
+    color: #222;
+    font-size: 1.3rem;
+}
+
+.admin-section ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 1rem;
+}
+
+.admin-section li {
+    margin-bottom: 0.75rem;
+}
+
+.admin-section a {
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.admin-section a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* adding question and editing question styling */
+/* Admin - Add/Edit Question Container */
+.admin-question-container {
+    max-width: 850px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-question-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.admin-question-container form .form-group {
+    margin-bottom: 1.2rem;
+}
+
+.admin-question-container label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #444;
+}
+
+.admin-question-container input[type="text"],
+.admin-question-container textarea,
+.admin-question-container select {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.admin-question-container textarea {
+    resize: vertical;
+}
+
+.admin-question-container button {
+    background-color: #004f8b;
+    color: #fff;
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
+.admin-question-container button:hover {
+    background-color: #003f73;
+}
+
+/* Edit Question Table Styling */
+.edit-question-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+}
+
+.edit-question-table th,
+.edit-question-table td {
+    border: 1px solid #ddd;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.edit-question-table th {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.edit-question-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.edit-question-table a {
+    text-decoration: none;
+    color: #004f8b;
+    font-weight: bold;
+}
+.edit-question-table a:hover {
+    text-decoration: underline;
+}

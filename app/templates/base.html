@@ -9,6 +9,7 @@
     <!-- This is for page-specific CSS -->
     {% block extra_css %}{% endblock %}
     <!-- CodeMirror 5 -->
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/monokai.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
@@ -27,6 +28,9 @@
             <a href="{{ url_for('main.events') }}">Events</a>
             <a href="{{ url_for('main.certifications') }}">Certifications</a>
             <a href="{{ url_for('main.feedback') }}">Feedback</a>
+            {% if session.get('role') in ['moderator', 'superadmin'] %}
+                <a href="{{ url_for('admin.dashboard') }}">Admin</a>
+            {% endif %}
             {% if session.get('username') %}
                 <div class="user-dropdown">
                     <span>{{ session['username'] }}</span>

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Question - {{ question.title }}{% endblock %}
+
+{% block content %}
+<div class="admin-question-container">
+    <h2>Edit Question</h2>
+    <form method="POST" action="{{ url_for('admin.edit_question', question_id=question.id) }}">
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" value="{{ question.title }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="prompt">Prompt (Markdown supported):</label>
+            <textarea name="prompt" id="prompt" rows="8" required>{{ question.prompt }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="language">Language:</label>
+            <select name="language" id="language" required>
+                <option value="python" {% if question.language == 'python' %}selected{% endif %}>Python</option>
+                <option value="sql" {% if question.language == 'sql' %}selected{% endif %}>SQL</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <select name="category" id="category" required>
+                <option value="Computer Science" {% if question.category == 'Computer Science' %}selected{% endif %}>Computer Science</option>
+                <option value="Databases" {% if question.category == 'Databases' %}selected{% endif %}>Databases</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="difficulty">Difficulty:</label>
+            <select name="difficulty" id="difficulty" required>
+                <option value="Easy" {% if question.difficulty == 'Easy' %}selected{% endif %}>Easy</option>
+                <option value="Medium" {% if question.difficulty == 'Medium' %}selected{% endif %}>Medium</option>
+                <option value="Hard" {% if question.difficulty == 'Hard' %}selected{% endif %}>Hard</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="function_signature_group">
+            <label for="function_signature">Function Signature (Python only):</label>
+            <input type="text" name="function_signature" id="function_signature"
+                   value="{{ question.function_signature or '' }}"
+                   placeholder="e.g. def solution(nums, target):">
+        </div>
+
+        <button type="submit">💾 Save Changes</button>
+    </form>
+    <p><a href="{{ url_for('admin.edit_question_list') }}">← Back to Question List</a></p>
+</div>
+
+<script src="{{ url_for('static', filename='js/add_question.js') }}"></script>
+{% endblock %}

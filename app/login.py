@@ -26,7 +26,7 @@ def handle_login(form):
 
     conn = get_db_connection()
     with conn.cursor() as cursor:
-        cursor.execute("SELECT password FROM users WHERE LOWER(username) = LOWER(%s)", (username,))
+        cursor.execute("SELECT password, role FROM users WHERE LOWER(username) = LOWER(%s)", (username,))
         result = cursor.fetchone()
 
         ## We have to start debugging what we actually got because its not allowing us to login
@@ -47,6 +47,7 @@ def handle_login(form):
     if bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
         ## Password matches
         session['username'] = username
+        session['role'] = result['role']
         return True, f"Welcome back, {username}!"
     else:
         return False, "Invalid username or password."
