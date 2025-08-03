@@ -12,6 +12,7 @@ def handle_feedback(form, session):
 
     Args:
         form (ImmutableMultiDict): The submitted feedback form containing:
+            - name (str): The user's name (for anonymous feedback)
             - feedback_text (str): The user's feedback.
             - category (str): The category of feedback (default: 'general').
             - email (str): Optional email of the user.
@@ -23,8 +24,15 @@ def handle_feedback(form, session):
             - message: Confirmation or error message.
     """
     feedback_text = form.get("feedback_text", "").strip()
+    
+    if not feedback_text:
+        return False, "Feedback cannot be empty."
+    elif len(feedback_text) > 1000:
+        return False, "Feedback must be under 1000 characters."
+    
     category = form.get("category", "general")
     email = form.get("email", "").strip()
+    name = form.get("name", "").strip()
 
     if not feedback_text:
         return False, "Feedback cannot be empty."
@@ -39,13 +47,14 @@ def handle_feedback(form, session):
         conn.close()
         if row:
             user_id = row['id']
+            name = session['username']
 
     conn = get_db_connection()
     with conn.cursor() as cursor:
         cursor.execute("""
-            INSERT INTO feedback (user_id, email, category, feedback_text)
-            VALUES (%s, %s, %s, %s)
-        """, (user_id, email, category, feedback_text))
+            INSERT INTO feedback (user_id, name, email, category, feedback_text)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (user_id, name, email, category, feedback_text))
         conn.commit()
     conn.close()
 
