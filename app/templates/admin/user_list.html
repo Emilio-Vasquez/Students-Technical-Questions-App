@@ -5,7 +5,6 @@
 <div class="admin-container" style="max-width: 1000px; margin: 0 auto;">
   <h2 style="text-align: center; margin-bottom: 2rem;">User Management</h2>
 
-  <!-- ✅ Outer form only for DELETE checkboxes -->
   <form id="delete-users-form" method="POST" action="{{ url_for('admin.delete_users') }}">
     <table style="width: 100%; border-collapse: collapse;">
       <thead>
@@ -34,18 +33,18 @@
           <td>
             {% if user.username != session.username %}
               {% if user.is_verified %}
-                <button type="button" onclick="document.getElementById('verify-form-{{ user.id }}').submit();">Unverify</button>
+                <button type="button" onclick="submitVerifyForm({{ user.id }}, '{{ user.username }}', 'unverify')">Unverify</button>
               {% else %}
-                <button type="button" onclick="document.getElementById('verify-form-{{ user.id }}').submit();">Verify</button>
+                <button type="button" onclick="submitVerifyForm({{ user.id }}, '{{ user.username }}', 'verify')">Verify</button>
               {% endif %}
             {% endif %}
           </td>
           <td>
             {% if user.username != session.username %}
               {% if user.role == 'user' %}
-                <button type="button" onclick="document.getElementById('promote-form-{{ user.id }}').submit();">Promote</button>
+                <button type="button" onclick="submitPromoteForm({{ user.id }}, '{{ user.username }}', 'promote')">Promote</button>
               {% elif user.role == 'moderator' %}
-                <button type="button" onclick="document.getElementById('promote-form-{{ user.id }}').submit();">Demote</button>
+                <button type="button" onclick="submitPromoteForm({{ user.id }}, '{{ user.username }}', 'demote')">Demote</button>
               {% endif %}
             {% else %}
               <em>(You)</em>
@@ -61,34 +60,30 @@
     </div>
   </form>
 
-  <!-- ✅ Hidden forms for JS submission -->
   {% for user in users %}
     {% if user.username != session.username %}
       <form method="POST" action="{{ url_for('admin.verify_user') }}" style="display:none;" id="verify-form-{{ user.id }}">
         <input type="hidden" name="username" value="{{ user.username }}">
-        {% if user.is_verified %}
-          <input type="hidden" name="action" value="unverify">
-        {% else %}
-          <input type="hidden" name="action" value="verify">
-        {% endif %}
+        <input type="hidden" name="action" value="">
       </form>
 
       <form method="POST" action="{{ url_for('admin.promote_user') }}" style="display:none;" id="promote-form-{{ user.id }}">
         <input type="hidden" name="username" value="{{ user.username }}">
-        {% if user.role == 'user' %}
-          <input type="hidden" name="action" value="promote">
-        {% elif user.role == 'moderator' %}
-          <input type="hidden" name="action" value="demote">
-        {% endif %}
+        <input type="hidden" name="action" value="">
       </form>
     {% endif %}
   {% endfor %}
 </div>
 
-<script>
-  document.getElementById('select-all').addEventListener('click', function(e) {
-    const checkboxes = document.querySelectorAll('input[name="user_ids"]');
-    for (const cb of checkboxes) cb.checked = e.target.checked;
-  });
-</script>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        showFlash("{{ message }}", "{{ 'danger' if category == 'error' else category }}");
+      });
+    </script>
+  {% endfor %}
+{% endwith %}
+
+<script src="{{ url_for('static', filename='js/user_management.js') }}"></script>
 {% endblock %}

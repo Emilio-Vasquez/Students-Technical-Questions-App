@@ -26,34 +26,32 @@ def promote_user():
     action = request.form.get('action')  # 'promote' or 'demote'
 
     if not username or action not in ['promote', 'demote']:
-        flash('Invalid promotion request.')
+        flash('Invalid promotion request.', 'error')
         return redirect(url_for('admin.user_list'))
 
-    # Prevent changing your own role
     if username == session.get('username'):
-        flash("You cannot change your own role.")
+        flash("You cannot change your own role.", 'warning')
         return redirect(url_for('admin.user_list'))
 
     db = get_db_connection()
     cursor = db.cursor()
 
     try:
-        # Get user info
         cursor.execute("SELECT id, role FROM users WHERE username = %s", (username,))
         user = cursor.fetchone()
 
         if not user:
-            flash("User not found.")
+            flash("User not found.", 'error')
             return redirect(url_for('admin.user_list'))
 
         new_role = 'moderator' if action == 'promote' else 'user'
         cursor.execute("UPDATE users SET role = %s WHERE username = %s", (new_role, username))
         db.commit()
 
-        flash(f"{username} has been successfully {'promoted to Moderator' if action == 'promote' else 'demoted to User'}.")
+        flash(f"{username} has been {'promoted to Moderator' if action == 'promote' else 'demoted to User'}.", 'success')
     except Exception as e:
         db.rollback()
-        flash(f"Error processing request: {str(e)}")
+        flash(f"Error processing request: {str(e)}", 'error')
     finally:
         cursor.close()
         db.close()
@@ -67,7 +65,7 @@ def verify_user():
     action = request.form.get('action')  # 'verify' or 'unverify'
 
     if not username or action not in ['verify', 'unverify']:
-        flash('Invalid verification request.')
+        flash('Invalid verification request.', 'error')
         return redirect(url_for('admin.user_list'))
 
     db = get_db_connection()
@@ -77,10 +75,10 @@ def verify_user():
         verify_status = 1 if action == 'verify' else 0
         cursor.execute("UPDATE users SET is_verified = %s WHERE username = %s", (verify_status, username))
         db.commit()
-        flash(f"{username} has been {'verified' if action == 'verify' else 'unverified'}.")
+        flash(f"{username} has been {'verified' if action == 'verify' else 'unverified'}.", 'success')
     except Exception as e:
         db.rollback()
-        flash(f"Error verifying user: {str(e)}")
+        flash(f"Error verifying user: {str(e)}", 'error')
     finally:
         cursor.close()
         db.close()
@@ -93,7 +91,7 @@ def delete_users():
     user_ids = request.form.getlist('user_ids')
 
     if not user_ids:
-        flash("No users selected for deletion.")
+        flash("No users selected for deletion.", 'warning')
         return redirect(url_for('admin.user_list'))
 
     db = get_db_connection()
@@ -103,10 +101,10 @@ def delete_users():
         format_strings = ','.join(['%s'] * len(user_ids))
         cursor.execute(f"DELETE FROM users WHERE id IN ({format_strings})", tuple(user_ids))
         db.commit()
-        flash(f"{len(user_ids)} user(s) deleted successfully.")
+        flash(f"{len(user_ids)} user(s) deleted successfully.", 'success')
     except Exception as e:
         db.rollback()
-        flash(f"Error deleting users: {str(e)}")
+        flash(f"Error deleting users: {str(e)}", 'error')
     finally:
         cursor.close()
         db.close()

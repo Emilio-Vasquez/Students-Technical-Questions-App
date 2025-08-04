@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS feedback (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NULL,
-    name VARCHAR(255);
+    name VARCHAR(255),
     email VARCHAR(255),
     category VARCHAR(100) DEFAULT 'general',
     feedback_text TEXT NOT NULL,
@@ -88,8 +88,6 @@ CREATE TABLE IF NOT EXISTS password_resets (
 );
 
 -- Creating these two tables for the comments storage and posting:
-DROP TABLE IF EXISTS comments;
-
 CREATE TABLE comments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     question_id INT NOT NULL,
