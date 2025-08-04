@@ -90,7 +90,13 @@ Technical-Questions-App/
 │   │   │   ├── dashboard.html
 │   │   │   ├── edit_question_list.html
 │   │   │   ├── edit_question.html
-│   │   │   └── manage_test_cases.html
+│   │   │   ├── edit_submissions.html
+│   │   │   ├── feedback_inbox.html
+│   │   │   ├── manage_submissions.html
+│   │   │   ├── manage_test_cases.html
+│   │   │   ├── tools.html
+│   │   │   ├── user_list.html
+│   │   │   └── view_submissions.html
 │   │   ├── account_settings.html
 │   │   ├── base.html
 │   │   ├── certifications.html
