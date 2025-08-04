@@ -1,24 +1,18 @@
 # ------------------------------
 # Submissions
 # ------------------------------
-import os
-import mysql.connector
 from flask import render_template, request
 from app.admin.routes import admin_bp
 from app.admin.utils import admin_required
+from app.db import get_db_connection
 
 @admin_bp.route('/view_submissions')
 @admin_required
 def view_submissions():
     ## Local MySQL connection using env vars
     ## only necessary because dictionary=true was not working from get_db_connection()
-    conn = mysql.connector.connect(
-        host=os.getenv("DB_HOST", "localhost"),
-        user=os.getenv("DB_USER", "your_username"),
-        password=os.getenv("DB_PASSWORD", "your_password"),
-        database=os.getenv("DB_NAME", "your_database"),
-    )
-    cursor = conn.cursor(dictionary=True)
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
     # Get optional filters
     username_filter = request.args.get('username')

@@ -14,17 +14,11 @@ from app.db import get_db_connection
 def system_tools():
     return render_template('admin/tools.html')
 
-
 @admin_bp.route('/manage_submissions')
 @superadmin_required
 def manage_submissions():
-    conn = mysql.connector.connect(
-        host=os.getenv("DB_HOST", "localhost"),
-        user=os.getenv("DB_USER", "your_username"),
-        password=os.getenv("DB_PASSWORD", "your_password"),
-        database=os.getenv("DB_NAME", "your_database"),
-    )
-    cursor = conn.cursor(dictionary=True)
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
     username_filter = request.args.get('username')
     question_filter = request.args.get('question')
@@ -85,17 +79,11 @@ def manage_submissions():
         sort_order=sort_order
     )
 
-
 @admin_bp.route('/edit_submission/<int:submission_id>', methods=['GET', 'POST'])
 @superadmin_required
 def edit_submission(submission_id):
-    conn = mysql.connector.connect(
-        host=os.getenv("DB_HOST", "localhost"),
-        user=os.getenv("DB_USER", "your_username"),
-        password=os.getenv("DB_PASSWORD", "your_password"),
-        database=os.getenv("DB_NAME", "your_database"),
-    )
-    cursor = conn.cursor(dictionary=True)
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
     if request.method == 'POST':
         new_code = request.form.get('code', '').strip()
@@ -132,7 +120,6 @@ def edit_submission(submission_id):
 
     return render_template('admin/edit_submission.html', submission=submission)
 
-
 @admin_bp.route('/reset_submissions', methods=['POST'])
 @superadmin_required
 def reset_submissions():
@@ -149,7 +136,6 @@ def reset_submissions():
         cursor.close()
         db.close()
     return redirect(url_for('admin.system_tools'))
-
 
 @admin_bp.route('/export_data')
 @superadmin_required
@@ -233,4 +219,3 @@ def delete_submissions():
         db.close()
 
     return redirect(url_for('admin.system_tools'))
-
