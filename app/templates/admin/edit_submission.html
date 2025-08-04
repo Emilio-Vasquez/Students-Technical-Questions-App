@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Submission #{{ submission.id }} - Superadmin{% endblock %}
+
+{% block content %}
+<div class="edit-submission-container" style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+    <h2>Edit Submission #{{ submission.id }}</h2>
+
+    <form method="POST" class="edit-submission-form">
+        <div style="margin-bottom: 1.5rem;">
+            <label><strong>User:</strong></label>
+            <p style="margin-top: 0.25rem;">{{ submission.username }}</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label><strong>Question:</strong></label>
+            <p style="margin-top: 0.25rem;">{{ submission.question_title }}</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label for="code_submission"><strong>Code Submission:</strong></label>
+            <textarea name="code" id="code" rows="12" style="width: 100%; padding: 1rem; font-family: monospace; font-size: 0.95rem;">{{ submission.code }}</textarea>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label for="passed"><strong>Passed:</strong></label>
+            <select name="passed" id="passed" style="margin-left: 0.5rem; padding: 0.4rem;">
+                <option value="1" {% if submission.passed %}selected{% endif %}>✔ Yes</option>
+                <option value="0" {% if not submission.passed %}selected{% endif %}>✘ No</option>
+            </select>
+        </div>
+
+        <button type="submit" style="background-color: #27ae60; color: white; border: none; padding: 0.6rem 1.25rem; border-radius: 4px;">
+            💾 Save Changes
+        </button>
+        <a href="{{ url_for('admin.manage_submissions') }}" class="cancel-link">Cancel</a>
+    </form>
+</div>
+{% endblock %}

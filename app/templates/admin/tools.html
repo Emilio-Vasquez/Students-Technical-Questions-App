@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}System Tools - Admin{% endblock %}
+
+{% block content %}
+<div class="admin-container" style="max-width: 900px; margin: 0 auto;">
+  <h2 style="text-align: center; margin-bottom: 2rem;">🛠️ System Tools</h2>
+
+  <div class="tool-section" style="margin-bottom: 2rem;">
+    <h3>Reset All Submissions</h3>
+    <p style="color: #c0392b; font-weight: bold;">
+      ⚠️ This will permanently delete <u>all user submissions</u> from the database.
+    </p>
+    <form method="POST" action="{{ url_for('admin.reset_submissions') }}" 
+          onsubmit="return confirm('Are you sure you want to delete ALL user submissions? This action cannot be undone.');">
+      <button type="submit" style="background-color: #c0392b; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px;">
+        🧼 Reset All Submissions
+      </button>
+    </form>
+  </div>
+
+  <div class="tool-section" style="margin-bottom: 2rem;">
+    <h3>Manage Specific Submissions</h3>
+    <p>Use this to find and delete individual user submissions.</p>
+    <a href="{{ url_for('admin.manage_submissions') }}" style="text-decoration: none;">
+      <button style="background-color: #2980b9; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px;">
+        📂 Open Submissions Panel
+      </button>
+    </a>
+  </div>
+
+  <div class="tool-section">
+    <h3>Export Submission Data</h3>
+    <form method="GET" action="{{ url_for('admin.export_data') }}" style="margin-bottom: 1rem;">
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+        <div>
+          <label for="username">Username:</label><br>
+          <input type="text" name="username" id="username" placeholder="Exact username">
+        </div>
+        <div>
+          <label for="question_title">Question Title:</label><br>
+          <input type="text" name="question_title" id="question_title" placeholder="Partial title okay">
+        </div>
+        <div>
+          <button type="submit" style="background-color: #27ae60; color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px;">
+            ⬇️ Export CSV
+          </button>
+        </div>
+      </div>
+    </form>
+    <p>You can leave the fields blank to download the full export.</p>
+  </div>
+</div>
+{% endblock %}
