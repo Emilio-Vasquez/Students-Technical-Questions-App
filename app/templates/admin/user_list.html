@@ -5,7 +5,8 @@
 <div class="admin-container" style="max-width: 1000px; margin: 0 auto;">
   <h2 style="text-align: center; margin-bottom: 2rem;">User Management</h2>
 
-  <form method="POST" action="{{ url_for('admin.delete_users') }}">
+  <!-- ✅ Outer form only for DELETE checkboxes -->
+  <form id="delete-users-form" method="POST" action="{{ url_for('admin.delete_users') }}">
     <table style="width: 100%; border-collapse: collapse;">
       <thead>
         <tr style="background-color: #f4f4f4;">
@@ -32,37 +33,25 @@
           <td>{{ user.role }}</td>
           <td>
             {% if user.username != session.username %}
-            <form method="POST" action="{{ url_for('admin.verify_user') }}" style="display:inline;">
-              <input type="hidden" name="username" value="{{ user.username }}">
               {% if user.is_verified %}
-                <input type="hidden" name="action" value="unverify">
-                <button type="submit">Unverify</button>
+                <button type="button" onclick="document.getElementById('verify-form-{{ user.id }}').submit();">Unverify</button>
               {% else %}
-                <input type="hidden" name="action" value="verify">
-                <button type="submit">Verify</button>
+                <button type="button" onclick="document.getElementById('verify-form-{{ user.id }}').submit();">Verify</button>
               {% endif %}
-            </form>
             {% endif %}
           </td>
           <td>
             {% if user.username != session.username %}
-              <form method="POST" action="{{ url_for('admin.promote_user') }}" style="display:inline;">
-                <input type="hidden" name="username" value="{{ user.username }}">
-                {% if user.role == 'user' %}
-                  <input type="hidden" name="action" value="promote">
-                  <button type="submit">Promote</button>
-                {% elif user.role == 'moderator' %}
-                  <input type="hidden" name="action" value="demote">
-                  <button type="submit">Demote</button>
-                {% endif %}
-              </form>
+              {% if user.role == 'user' %}
+                <button type="button" onclick="document.getElementById('promote-form-{{ user.id }}').submit();">Promote</button>
+              {% elif user.role == 'moderator' %}
+                <button type="button" onclick="document.getElementById('promote-form-{{ user.id }}').submit();">Demote</button>
+              {% endif %}
             {% else %}
               <em>(You)</em>
             {% endif %}
           </td>
         </tr>
-        {% else %}
-        <tr><td colspan="7" style="text-align:center;">No users found.</td></tr>
         {% endfor %}
       </tbody>
     </table>
@@ -71,6 +60,29 @@
       <button type="submit" onclick="return confirm('Are you sure you want to delete the selected users?')">Delete Selected</button>
     </div>
   </form>
+
+  <!-- ✅ Hidden forms for JS submission -->
+  {% for user in users %}
+    {% if user.username != session.username %}
+      <form method="POST" action="{{ url_for('admin.verify_user') }}" style="display:none;" id="verify-form-{{ user.id }}">
+        <input type="hidden" name="username" value="{{ user.username }}">
+        {% if user.is_verified %}
+          <input type="hidden" name="action" value="unverify">
+        {% else %}
+          <input type="hidden" name="action" value="verify">
+        {% endif %}
+      </form>
+
+      <form method="POST" action="{{ url_for('admin.promote_user') }}" style="display:none;" id="promote-form-{{ user.id }}">
+        <input type="hidden" name="username" value="{{ user.username }}">
+        {% if user.role == 'user' %}
+          <input type="hidden" name="action" value="promote">
+        {% elif user.role == 'moderator' %}
+          <input type="hidden" name="action" value="demote">
+        {% endif %}
+      </form>
+    {% endif %}
+  {% endfor %}
 </div>
 
 <script>
