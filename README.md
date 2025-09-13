@@ -151,24 +151,37 @@ Technical-Questions-App/
 
 ### 1. User Authentication
 
-Users can create accounts with a username, email, and password.  
-Passwords are securely hashed using bcrypt.  
+Users can create accounts with a username, email, and password.
+
+![Registration and Login](app/static/images/registration-and-login.gif)
+
+Passwords are securely hashed using bcrypt.
+
+![Password Encrypted](app/static/images/password-encryption.gif)
+
 Session management is handled through Flask's built-in session system.
 
 ### 2. Question Management
 
-Questions are stored in a MySQL database and organized into three categories: Computer Science, Data Science, and Databases.  
+Questions are stored in a MySQL database and organized into three categories: Computer Science, Data Science, and Databases.
+
 Each question includes a title, slug, category, language, prompt, and a set of test cases for evaluation.
+
+![Questions](app/static/images/questions.gif)
 
 ### 3. Code Evaluation
 
 Python code is executed in a secure, sandboxed environment using Docker to prevent unsafe behavior.  
 SQL submissions are executed against an in-memory test database and evaluated based on expected output.
 
+![Docker Evaluation](app/static/images/docker-evaluation.gif)
+
 ### 4. Language Toggle with Persistence
 
 Each question supports both Python and SQL implementations.  
 Users can switch between the two languages, and their selection is retained across reloads and submissions.
+
+![Front-End Questions View](app/static/images/front-end-questions-view.gif)
 
 ### 5. Theme Switching
 
@@ -181,20 +194,53 @@ However, this light/dark theme is not applied to the whole page, only the textar
 Users can monitor their progress within each category.  
 Both the total number of questions and the number completed are displayed using visual progress indicators.
 
+![Progress Checking](app/static/images/progress-checking.gif)
+
 ### 7. Account Settings
 
 Users can manage their account through the settings page.  
 They can change their password, update their phone number, and verify their email address.  
 Progress data is displayed using a card-based layout for clarity.
 
+![Account Settings](app/static/images/account-settings.gif)
+
 ### 8. Question Submission and Feedback
 
 Users can submit solutions to each question and immediately view evaluation results.  
 A dedicated feedback page is available for users to submit comments or suggestions about the platform.
 
-### 9. Admin & Superadmin Dashboards
+This is the **feedback** mechanisms:
+
+![Feedback](app/static/images/feedback.gif)
+
+### 9. Comment System with Voting & Replies
+
+Each question includes a dedicated **comment thread** where users can:
+
+- Post comments and discuss approaches to solutions.  
+- Upvote or downvote comments to surface the most helpful responses.  
+- Reply directly to other comments (recursive structure), creating nested threads for clearer discussions.  
+- View threads in a clean, indented layout for readability.  
+
+This feature helps students collaborate, share insights, and build a peer-learning environment directly within the platform.
+
+![Comments](app/static/images/comments.gif)
+
+### 10. Admin & Superadmin Dashboards
 
 Role-based tools for moderation, question/test-case management, submission triage/export, and user administration with superadmin only controls.
+
+**Regular people do not have the admin tab**
+
+![Regular Users](app/static/images/regular-users.gif)
+
+**Admins have the admin tab** but it does not contain all the tools.
+
+![Admins](app/static/images/admins.png)
+
+**Superadmins have the admin tab and all tools**.
+
+![Superadmins](app/static/images/superadmins.gif)
 
 ## Admin & Superadmin Dashboards
 
@@ -349,6 +395,8 @@ Once you have **downloaded docker and created an account** your Docker Desktop s
    ```bash
    python run.py
    ```
+
+![Run App](app/static/images/run-app.gif)
 
 ## Docker Integration
 
