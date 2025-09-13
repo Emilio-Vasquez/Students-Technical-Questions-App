@@ -4,7 +4,7 @@
 
 **Technical Questions App** is an interactive coding practice platform built for students at **Union College of Union County, NJ (UCNJ)**. Designed to simulate real-world technical interviews, it helps students sharpen their skills in **Python** and **SQL** through hands-on problem solving.
 
-Students can register, log in, browse categorized questions, write and submit code directly in the browser, and receive instant feedback. The platform features built-in progress tracking and secure sandboxed code evaluation—all wrapped in a responsive, user-friendly interface.
+Students can register, log in, browse categorized questions, write and submit code directly in the browser, and receive instant feedback. The platform features built-in progress tracking and secure sandboxed code evaluation, all wrapped in a responsive, user-friendly interface.
 
 ## Table of Contents
 - [Overview](#overview)
