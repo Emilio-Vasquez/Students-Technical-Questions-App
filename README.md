@@ -6,6 +6,27 @@
 
 Students can register, log in, browse categorized questions, write and submit code directly in the browser, and receive instant feedback. The platform features built-in progress tracking and secure sandboxed code evaluation—all wrapped in a responsive, user-friendly interface.
 
+## Table of Contents
+- [Overview](#overview)
+- [Purpose](#purpose)
+- [Project Structure](#project-structure)
+- [Key Features](#key-features)
+- [Admin & Superadmin Dashboards](#admin--superadmin-dashboards)
+- [Running the App](#running-the-app)
+  - [Prerequisites](#prerequisites)
+  - [Environment Setup Instructions](#environment-setup-instructions)
+    - [Python](#python)
+    - [MySQL](#mysql)
+    - [Visual Studio Code](#visual-studio-code)
+    - [Docker](#docker)
+  - [Application Setup Instructions](#application-setup-instructions)
+- [Docker Integration](#docker-integration)
+- [Database Migration](#database-migration)
+- [Testing](#testing)
+- [Technologies Used](#technologies-used)
+- [Contribution Guidelines](#contribution-guidelines)
+- [License](#license)
+
 ## Purpose
 
 This project was created to:
@@ -171,46 +192,102 @@ Progress data is displayed using a card-based layout for clarity.
 Users can submit solutions to each question and immediately view evaluation results.  
 A dedicated feedback page is available for users to submit comments or suggestions about the platform.
 
-## Docker Integration
+### 9. Admin & Superadmin Dashboards
 
-Python code is executed in an isolated Docker container to ensure security.  
-The grader container runs the user’s code separately and returns the result to the main Flask application.  
-This architecture prevents malicious or unstable code from affecting the host system.
+Role-based tools for moderation, question/test-case management, submission triage/export, and user administration with superadmin only controls.
 
-## Database Migration
+## Admin & Superadmin Dashboards
 
-Initial question data is defined in a JSON file located at `app/data/questions.json`.  
-This data is imported into the MySQL `questions` table using the migration script `app/scripts/migrate_questions.py`.
-The data for the test cases are also within the keys of the `questions.json` file, but the table filled is
-`question_test_cases`, and the migration script is `app/scripts/migrate_test_cases.py`.
+This app includes **role-based access control (RBAC)** with two privileged roles:
 
-## Testing
-
-Unit tests are located in the `app/test/` directory.  
-They cover the following functionality:
-
-- Python code evaluation
-- SQL query evaluation
-- Database connection handling
-
-## Technologies Used
-
-- Flask for backend routing, templating, and session control  
-- MySQL for relational data storage  
-- Docker for secure, sandboxed code execution  
-- JavaScript for client-side interactivity  
-- HTML and CSS (UCNJ design theme) for layout and responsiveness  
-- bcrypt for password encryption and verification
+| Capability | Authenticated User | Admin | Superadmin |
+|------------|--------------------|-------|------------|
+| Browse/solve questions | ✅ | ✅ | ✅ |
+| View My Submissions | ✅ | ✅ | ✅ |
+| Admin Dashboard (`/admin/dashboard`) | ❌ | ✅ | ✅ |
+| Manage Questions (`/admin/questions`) | ❌ | ✅ | ✅ |
+| Manage Test Cases (`/admin/manage_test_cases`) | ❌ | ✅ | ✅ |
+| Feedback Inbox (`/admin/feedback_inbox`) | ❌ | ✅ | ✅ |
+| View Submissions (`/admin/view_submissions`) | ❌ | ✅ | ✅ |
+| **Superadmin Submissions Management** (`/admin/manage_submissions`) | ❌ | ❌ | ✅ |
+| **User Management** (`/admin/user_list`) | ❌ | ❌ | ✅ |
+| **Tools (system-level)** (`/admin/tools`) | ❌ | ❌ | ✅ |
 
 ## Running the App
 
 ### Prerequisites
 
 - Python 3.9 or higher  
-- Docker installed and running  
+- Docker installed and running(required for Python grader sandbox)
 - MySQL server with appropriate user credentials
 
-### Setup Instructions
+### Environment Setup Instructions:
+
+#### Python
+
+[Python Download](https://www.python.org/downloads/)
+
+![Python Download Page](app/static/images/python-download-page.png)
+
+**Once Python is downloaded** open up your terminal.
+- **If** you're on **MacOS**, you should use **finder** to open up terminal. Or it should be at the top of your computer screen.
+- **If** you're on **Windows**, you should use the **windows search box** and type **cmd** to open up the command-line interface.
+
+**Now** that youre **terminal is open**:
+- **If** you're on **MacOS** type: `python3 --version` and press **enter**
+- **If** you're on **Windows** type: `python --version` and press **enter**
+
+After you run this command, you should see: `Python 3.xx.x` where the **x** stands for the **version** of your python download.
+
+![Python Check](app/static/images/python-check.gif)
+
+**If** your terminal does **not** show the python version, it may be because of python is not inside of your **system variables**.
+
+**To fix this:** open up `environment variables` via your **windows search box**
+
+**Then** open up `edit environment variables...` tab, once that **pops** up, you should click `edit environment variables`.
+
+**After** clicking `edit environment variables`, you should get **one screen** displaying **user variables** and **system variables**. **Search** under the **system variables** for the `path` section, once you find that `path` section, click it, it should now turn **blue** as it's been highlighted. **Now click** `edit`.
+
+**This is where you want to add the location of your Python download**.
+
+![Python Environment Check](app/static/images/python-environment-variables.gif)
+
+**If you don't know the location of the Python download** please visit this [video](https://www.youtube.com/watch?v=po7_02HLP0c&list=PL-yGP0RJ99EGbiGxTswNZqffoAqz1IGCe&index=3)
+
+**After** you added the correct Python download path. Press `ok` through the screens to save the path you added.
+
+**Now** open up your terminal again and check if your Python download is now integrated into your system by running the `python --version` command.
+
+#### MySQL
+
+MySQL Download:
+- [MacOS Download](https://dev.mysql.com/downloads/mysql/8.0.html)
+- [Windows/Linux Download](https://dev.mysql.com/downloads/installer/)
+
+**Windows Users: Install the minimum version** of MySQL.
+
+![MySQL Download](app/static/images/mysql-download.gif)
+
+**Once** the installer is ready, open it and setup the **server** and the **workbench** only. If you need help with this portion, go to this [video](https://www.youtube.com/watch?v=Hdb7wgE0RJw)
+
+#### Visual Studio Code
+
+[Visual Studio Code Download](https://code.visualstudio.com/download)
+
+#### Docker
+
+**In order** to run our python tester in an isolated environment, we will be using Docker Desktop.
+
+The setup is simple, we just need to install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+
+Then create an account with Docker **for free**, and **Visual Studio Code** should integrate your login of Docker automatically.
+
+Once you have **downloaded docker and created an account** your Docker Desktop should look similar to this:
+
+![Docker Running](app/static/images/docker-desktop-running-image.png)
+
+### Application Setup Instructions
 
 1. Clone the repository:
    ```bash
@@ -268,10 +345,41 @@ They cover the following functionality:
     }
     ```
 
-5. Start the app:
+5. To start the app, run this in your **root directory**:
    ```bash
    python run.py
    ```
+
+## Docker Integration
+
+Python code is executed in an isolated Docker container to ensure security.  
+The grader container runs the user’s code separately and returns the result to the main Flask application.  
+This architecture prevents malicious or unstable code from affecting the host system.
+
+## Database Migration
+
+Initial question data is defined in a JSON file located at `app/data/questions.json`.  
+This data is imported into the MySQL `questions` table using the migration script `app/scripts/migrate_questions.py`.
+The data for the test cases are also within the keys of the `questions.json` file, but the table filled is
+`question_test_cases`, and the migration script is `app/scripts/migrate_test_cases.py`.
+
+## Testing
+
+Unit tests are located in the `app/test/` directory.  
+They cover the following functionality:
+
+- Python code evaluation
+- SQL query evaluation
+- Database connection handling
+
+## Technologies Used
+
+- Flask for backend routing, templating, and session control  
+- MySQL for relational data storage  
+- Docker for secure, sandboxed code execution  
+- JavaScript for client-side interactivity  
+- HTML and CSS (UCNJ design theme) for layout and responsiveness  
+- bcrypt for password encryption and verification
 
 ## Contribution Guidelines
 
