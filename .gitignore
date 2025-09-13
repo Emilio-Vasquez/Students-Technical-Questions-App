@@ -5,10 +5,10 @@ __pycache__/
 *.pyd
 .pytest_cache/
 
-# ## ignore the virtual environment and everything inside of it
+## ignore the virtual environment and everything inside of it
 VirtualEnv/
 
-# ## ignore the secret keys that we have in our environment
+## ignore the secret keys that we have in our environment
 .env
 .env.*
 VirtualEnv/
